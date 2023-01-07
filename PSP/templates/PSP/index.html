@@ -1,7 +1,41 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <link rel="stylesheet" href="{% static "css/index.css"%}">
+{% endblock %}
 
 {% block content %}
+    <header>
+        <h1>HICC 프로그래밍 대회 플랫폼<br><strong id="HICCjoon">HICCjoon</strong></h1>
+    </header>
+    <section>
+        <form id="panel_item" action="{% url 'PSP:index' %}" method="post">
+            {% csrf_token %}
+            <div id="panel_inner">
+                <div id="id_pw_wrap">
+                    <div class="input_row">
+                        <span class="material-symbols-outlined">badge</span>
+                        <div class="blank"></div>
+                        <input type="text" name="ID" id="ID" class="input_text" placeholder="아이디" maxlength="20">
+                    </div>
+                    <div class="input_row">
+                        <span class="material-symbols-outlined">key</span>
+                        <div class="blank"></div>
+                        <input type="password" name="password" id="password" class="input_text" placeholder="비밀번호" maxlength="15">
+                    </div>
+                </div>
+                <div id="buttons">
+                    <button type="submit" id="login_btn">login</button>
+                    <div class="blank"></div>
+                    <button type="submit" id="signup_btn">sign up</button>
+                </div>
+            </div>
+        </form>
+    </section>
 
-    <p>hello world</p>
+    <footer>
 
+    </footer>
 {% endblock %}
