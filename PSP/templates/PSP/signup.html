@@ -8,25 +8,45 @@
 
 {% block content %}
     <header>
-        <h1>HICCjoon</h1>
+        <h1><a href="{% url 'PSP:index' %}">HICCjoon</a></h1>
     </header>
     <section>
-        <div class="join_row">
-            <label for="join_name">이름</label>
-            <input type="text" id="join_name" maxlength="4">
-        </div>
-        <div class="join_row">
-            <label for="join_id">아이디</label>
-            <input type="text" id="join_id" maxlength="20">
-        </div>
-        <div class="join_row">
-            <label for="join_pw">비밀번호</label>
-            <input type="text" id="join_pw" maxlength="20">
-        </div>
-        <div class="join_row">
-            <label for="join_check_pw">비밀번호 재확인</label>
-            <input type="text" id="join_check_pw" maxlength="20">
-        </div>
+        <form id="panel_item" action="{% url 'PSP:signup' %}" onsubmit="return is_difference_password();" method="post">
+            {% csrf_token %}
+            <div id="panel_inner">
+                 <div class="join_row">
+                    <label for="join_name">이름</label>
+                    <input type="text" id="join_name" class="input_text" name="join_name" minlength="2" maxlength="5"
+                           pattern="[가-힣]{2,5}" required>
+                    <span id="name_err_message"></span>
+                </div>
+                <div class="join_row">
+                    <label for="join_id">아이디</label>
+                    <input type="text" id="join_id" class="input_text" name="join_id" minlength="4" maxlength="16"
+                           pattern="[a-zA-Z0-9]{4,16}" required>
+                    <span id="id_err_message"></span>
+                </div>
+                <div class="join_row">
+                    <label for="join_pw">비밀번호</label>
+                    <input type="password" id="join_pw" class="input_password" name="join_pw" minlength="8" maxlength="16"
+                           pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$" required>
+                    <span id="pw_err_message"></span>
+                </div>
+                <div class="join_row">
+                    <label for="join_check_pw">비밀번호 재확인</label>
+                    <input type="password" id="join_check_pw" class="input_password" name="check_password"
+                           value="" maxlength="16" required>
+                    <span id="pw_check_err_message"></span>
+                </div>
 
+                <div id="submit_button">
+                    <button type="submit" id="signup_btn">sign up</button>
+                </div>
+            </div>
+        </form>
     </section>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/signup.js' %}"></script>
 {% endblock %}
