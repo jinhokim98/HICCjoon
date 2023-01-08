@@ -22,4 +22,5 @@ app_name = 'PSP'
 urlpatterns = [
     path('', views.index, name='index'),
     path('signup/', views.signup, name='signup'),
+    path('lobby/', views.lobby, name='lobby'),
 ]

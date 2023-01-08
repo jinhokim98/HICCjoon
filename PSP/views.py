@@ -9,6 +9,8 @@ def index(request):
         print(id_)
         print(pw)
 
+        return redirect('PSP:lobby')
+
     return render(request, 'PSP/index.html')
 
 
@@ -25,3 +27,7 @@ def signup(request):
         return redirect('PSP:index')
 
     return render(request, 'PSP/signup.html')
+
+
+def lobby(request):
+    return render(request, 'PSP/lobby.html')
