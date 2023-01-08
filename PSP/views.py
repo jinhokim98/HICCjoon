@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 
 def index(request):
@@ -13,4 +13,15 @@ def index(request):
 
 
 def signup(request):
+    if request.method == "POST":
+        new_name = request.POST.get('join_name')
+        new_id = request.POST.get('join_id')
+        new_pw = request.POST.get('join_pw')
+
+        print(new_name)
+        print(new_id)
+        print(new_pw)
+
+        return redirect('PSP:index')
+
     return render(request, 'PSP/signup.html')
