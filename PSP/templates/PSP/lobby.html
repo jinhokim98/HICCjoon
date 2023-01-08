@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static "css/lobby.css"%}">
+{% endblock %}
+
+{% block content %}
+    <header>
+        <h1>{{ username }}님 환영합니다!</h1>
+    </header>
+    <section>
+        <div id="contest_rules">
+            <h2>대회 규칙</h2>
+            <ol>
+                <li>대회 규정1</li>
+                <li>대회 규정2</li>
+                <li>대회 규정3</li>
+                <li>대회 규정4</li>
+                <li>대회 규정5</li>
+            </ol>
+        </div>
+    </section>
+    <footer>
+        <p>대회까지 남은 시간 : </p>
+        <span id="remaining_time"></span>
+    </footer>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/lobby.js' %}"></script>
+{% endblock %}
