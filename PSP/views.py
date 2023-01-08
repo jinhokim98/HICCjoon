@@ -10,3 +10,7 @@ def index(request):
         print(pw)
 
     return render(request, 'PSP/index.html')
+
+
+def signup(request):
+    return render(request, 'PSP/signup.html')

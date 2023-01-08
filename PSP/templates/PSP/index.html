@@ -18,7 +18,7 @@
                     <div class="input_row">
                         <span class="material-symbols-outlined">badge</span>
                         <div class="blank"></div>
-                        <input type="text" name="ID" id="ID" class="input_text" placeholder="아이디" maxlength="20">
+                        <input type="text" name="id_" id="id_" class="input_text" placeholder="아이디" maxlength="20">
                     </div>
                     <div class="input_row">
                         <span class="material-symbols-outlined">key</span>
@@ -29,7 +29,7 @@
                 <div id="buttons">
                     <button type="submit" id="login_btn">login</button>
                     <div class="blank"></div>
-                    <button type="submit" id="signup_btn">sign up</button>
+                    <button type="button" id="signup_btn" onclick="location.href={% url 'PSP:signup' %}">sign up</button>
                 </div>
             </div>
         </form>
@@ -38,4 +38,7 @@
     <footer>
 
     </footer>
+{% endblock %}
+
+{% block js %}
 {% endblock %}
