@@ -29,6 +29,10 @@ def signup(request):
     return render(request, 'PSP/signup.html')
 
 
+def task(request):
+    return render(request, 'PSP/task.html')
+
+
 def lobby(request):
     return render(request, 'PSP/lobby.html')
 
