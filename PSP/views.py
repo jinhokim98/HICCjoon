@@ -35,3 +35,11 @@ def task(request):
 
 def lobby(request):
     return render(request, 'PSP/lobby.html')
+
+
+def monitoring(request):
+    return render(request, 'PSP/monitoring.html')
+
+
+def end(request):
+    return render(request, 'PSP/end.html')
