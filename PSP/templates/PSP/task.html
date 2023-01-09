@@ -3,104 +3,19 @@
 
 {% block css %}
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
-    <link rel="stylesheet" href="{% static "css/signup.css"%}">
+    <link rel="stylesheet" href="{% static 'css/task.css' %}">
     <!-- 아래 부분은 파일 분리 예정 -->
-    <style type="text/css">
-*{
-    margin: 0;
-    padding: 0;
-
-    font-size: 12px;
-
-    --task-title-size: 24px;
-    --code-font-size: 12px;
-
-    --main-theme-foreground: black;
-    --main-theme-background: lightgray;
-    --main-theme-code: white;
-}
-
-body{
-    background-color: darkgray;
-}
-
-/* body{
-    background-color: white;
-} */
-
-.main-section{
-    margin: 10px auto 10px auto;
-    padding: 20px;
-
-    width: 90vw;
-    
-    border: 1px solid var(--main-theme-foreground);
-    border-radius: 5px;
-
-    background-color: var(--main-theme-background);
-}
-
-article div{
-    margin: 2px;
-}
-
-#task-title, #solution-title{
-    font-size: var(--task-title-size);
-    font-weight: bold;
-} 
-
-#language-container{
-    display: inline;
-
-    margin-left: auto;
-    margin-right: 0;
-}
-
-#language{
-    display: inline-block;
-
-    margin: 0 0 0 auto;
-    vertical-align: bottom;
-}
-
-hr{
-    width: 98%;
-    margin: 10px auto 10px auto;
-    border-bottom: 0 0 1px 0 solid var(--main-theme-foreground);
-}
-
-#code{
-    display: block;
-    height: 50vh;
-    padding: 5px;
-    font-size: var(--code-font-size);
-    border: 1px solid var(--main-theme-foreground);
-    border-radius: 3px;
-    background-color: var(--main-theme-code);
-    overflow: scroll;
-}
-
-select{
-    display: block;
-    /* width: 100%; */
-}
-
-textarea{
-    border: 0;
-    width: 100%;
-}
-    </style>
 {% endblock %}
 
 {% block content %}
     <header class="main-section">
         <!-- 남은 시간은 여기에-->
-        <div>남은 시간: {remaining_time}</div>
+        <div>남은 시간: {{ remaining_time }}</div>
     </header>
     <article class="main-section">
-        <div id="task-title">{task_title}</div>
+        <div id="task-title">{{ task_title }}</div>
         <hr />
-        <div id="task-description">{task_description}</div>
+        <div id="task-description">{{ task_description }}</div>
     </article>
     <article class="main-section">
         <div>
@@ -121,52 +36,12 @@ textarea{
         </div>
         <button id="submit">제출!</button>
     </article>
-    
-    <!-- highlight는 이거 사용하고 싶긴 한데... : https://highlightjs.org/ -->
-    <link rel="stylesheet" href="highlight/styles/default.min.css">
-    <script src="highlight/highlight.min.js"></script>
-    <!-- <script>hljs.highlightElement(document.getElementById("code"));</script> -->
 {% endblock %}
 
 {% block js %}
-    <!-- 물론 파일 분리 예정 -->
-    <script type="text/javascript">
-
-const submitButton = document.getElementById("submit");
-const codeEditor = document.getElementById("code");
-const languageSelector = document.getElementById("language");
-
-// 마지막 코드 업데이트 후 스패밍 방지용 flag 하고 싶은데..
-last_submit = 0;
-
-// ajax code submittance
-function submit_code(e){
-    var http = new XMLHttpRequest();
-    http.open("post", "task_details.html", true);
-
-    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    var params = "language=" + document.getElementById("language").selectedOptions[0].value
-     + "&code=" + document.getElementById("code").innerText;
-    http.send(params);
-
-    http.onload = function(){
-        alert(http.responseText);
-    }
-}
-
-function refresh_highlight(e){
-    console.log(1);
-    hljs.highlightElement(codeEditor);
-}
-
-function confirm_language(e){
-    if(confirm("언어를 변경할 경우 코드가 초기화됩니다.\n필요한 경우 백업해주세요.\n\n언어를 변경하시겠습니까?")){
-        document.getElementById("code").innerText = "";
-    }
-}
-
-submitButton.addEventListener("click", submit_code);
-languageSelector.addEventListener("change", confirm_language);
-// codeEditor.addEventListener("input", refresh_highlight);
-    </script>
+<!-- highlight는 이거 사용하고 싶긴 한데... : https://highlightjs.org/ -->
+    <!-- <link rel="stylesheet" href="highlight/styles/default.min.css">
+    <script src="highlight/highlight.min.js"></script> -->
+    <!-- <script>hljs.highlightElement(document.getElementById("code"));</script> -->
+    <script src="{% static 'js/task.js' %}"></script>
 {% endblock %}
