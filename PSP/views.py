@@ -35,3 +35,7 @@ def lobby(request):
 
 def monitoring(request):
     return render(request, 'PSP/monitoring.html')
+
+
+def end(request):
+    return render(request, 'PSP/end.html')

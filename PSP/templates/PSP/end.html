@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static "css/end.css"%}">
+{% endblock %}
+
+{% block content %}
+    <header>
+        <h1>수고하셨습니다.</h1>
+    </header>
+    <section>
+        <div id="show_my_score">
+            <h2>{{ username }}님의 점수는</h2>
+            <span>{{ username.score }}점 입니다.</span>
+        </div>
+        <div id="show_summary">
+            <p>걸린 시간 : {{ during_time }}</p>
+            <p>해결한 문제 : {{ solving_problem }}</p>
+        </div>
+    </section>
+    <footer>
+
+    </footer>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/end.js' %}"></script>
+{% endblock %}
