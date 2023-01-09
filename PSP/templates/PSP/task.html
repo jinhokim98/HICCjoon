@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <link rel="stylesheet" href="{% static 'css/task.css' %}">
+    <!-- 아래 부분은 파일 분리 예정 -->
+{% endblock %}
+
+{% block content %}
+    <header class="main-section">
+        <!-- 남은 시간은 여기에-->
+        <div>남은 시간: {{ remaining_time }}</div>
+    </header>
+    <article class="main-section">
+        <div id="task-title">{{ task_title }}</div>
+        <hr />
+        <div id="task-description">{{ task_description }}</div>
+    </article>
+    <article class="main-section">
+        <div>
+            <span id="solution-title">Solution</span>
+
+            <!-- language: python-->
+            <div id="language-container">
+                <span>language</span>
+                <select id="language" name="language">
+                    <option value="cpp">C/C++</option>
+                    <option value="python">Python</option>
+                </select>
+            </div>
+        </div>
+        <hr />
+        <div>
+            <pre><span contenteditable="true" name="code" id="code">int main(){}</span></pre>
+        </div>
+        <button id="submit">제출!</button>
+    </article>
+{% endblock %}
+
+{% block js %}
+<!-- highlight는 이거 사용하고 싶긴 한데... : https://highlightjs.org/ -->
+    <!-- <link rel="stylesheet" href="highlight/styles/default.min.css">
+    <script src="highlight/highlight.min.js"></script> -->
+    <!-- <script>hljs.highlightElement(document.getElementById("code"));</script> -->
+    <script src="{% static 'js/task.js' %}"></script>
+{% endblock %}
