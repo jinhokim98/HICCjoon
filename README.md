@@ -24,7 +24,7 @@ HICC에서 프로그래밍 대회를 개최하기 위해 해당 서비스를 제
 
 -----
 
-### 3. Use Tech Stack
+## 3. Use Tech Stack
 
 + Django (Python Web Framework)
 
