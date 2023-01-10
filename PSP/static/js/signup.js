@@ -4,25 +4,36 @@ const join_pw = document.getElementById("join_pw");
 const join_check_pw = document.getElementById("join_check_pw");
 
 const join_row = {
-    name: join_name,
-    id_ : join_id,
-    pw: join_pw,
+    name: {
+        'tag' : join_name,
+        'invalid': false,
+    },
+    id_: {
+        'tag': join_id,
+        'invalid': false,
+    },
+    pw: {
+        'tag': join_pw,
+        'invalid': false,
+    },
 }
+
 
 function valid_check() {
     for (const key in join_row) {
-        join_row[key].addEventListener("invalid", function (e) {
-            document.forms[0].classList.add("was-validated");
-            show_error(join_row[key]);
-            e.preventDefault();
-        })
+        join_row[key]['invalid'] = false;
 
-        join_row[key].addEventListener('input', function () {
-            if (document.forms[0].classList.contains('was-validated')) {
-                join_row[key].reportValidity();
-            }
-        })
+        join_row[key]['tag'].addEventListener("invalid", function(e) {
+            show_error(join_row[key]['tag']);
+            join_row[key]['invalid'] = true;
+            e.preventDefault();
+        });
+
+        if (join_row[key]['invalid'] === false) {
+            show_nothing(join_row[key]['tag']);
+        }
     }
+    
     is_difference_password();
 }
 
@@ -38,11 +49,11 @@ function show_error(invalid) {
 
 function show_nothing(valid) {
     if (valid === join_name) {
-        document.getElementById('name_err_message').textContent = "";
+        document.getElementById('name_err_message').textContent = '';
     } else if (valid === join_id) {
-        document.getElementById('id_err_message').textContent = "";
+        document.getElementById('id_err_message').textContent = '';
     } else if (valid === join_pw) {
-        document.getElementById('pw_err_message').textContent = "";
+        document.getElementById('pw_err_message').textContent = '';
     }
 }
 
