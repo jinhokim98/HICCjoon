@@ -29,13 +29,14 @@ var csrf_token = get_cookie('csrftoken');
 // ajax code submittance
 function submit_code(e){
     var http = new XMLHttpRequest();
-    var number = "{% task_index %}" // 이거 가져오기만 하면 되는데 여기가 안되네
-    http.open("POST", "task/" + number, true);
-    
-    var language = document.getElementById("language").selectedOptions[0].value;
-    var source_code = document.getElementById("code").innerText
-    var jsonData = {"language" : language , "code" : source_code};
 
+    var url = window.location.href;
+    http.open("POST", url, true);
+    
+    var language = document.getElementById("language").selectedOptions[0].value; 
+    var source_code = document.getElementById("code").innerText
+    var jsonData = {"language" : language , "code" : source_code}; // 값 자체는 제대로 가져옴
+    
     // http.onreadystatechange = function() {
     //     if (http.readyState == 4) {
     //         if (http.status == 200 || xhr.status == 201){

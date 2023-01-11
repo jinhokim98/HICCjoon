@@ -26,5 +26,4 @@ urlpatterns = [
     path('task/<int:number>/', views.task, name='task'),
     path('monitoring/', views.monitoring, name='monitoring'),
     path('end/', views.end, name='end'),
-    path('task_submit/', views.task_submit, name='task_submit')
 ]

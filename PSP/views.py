@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-
+import json
+from datetime import datetime
 
 def index(request):
     if request.method == "POST":
@@ -31,34 +32,25 @@ def signup(request):
 
 
 def task(request, number: int = 1):
-    # print(request)
-    # print(request.method)
-    # if request.method == "POST":
-    #     source_code = request.POST.get('code')
-    #     language = request.POST.get('language')
-    #     print(f'source_code: {source_code}')
-    #     print(f'language: {language}')
+    print(request)
+    print(request.method)
+    if request.method == "POST":
+        data = json.loads(request.body)
+        print(f'language: {data["language"]}')
+        print(f'code: {data["code"]}')
+        print(f'task_no: {number}')
+        print(f'time: {datetime.now()}')  # 시간은 서버 시간 기준
+
     args = dict()
     args["task_index"] = number
     return render(request, 'PSP/task.html', args)
 
-
-def task_submit(request):
-    print("-=-=-=-=-")
-    print(request)
-    print(request.method)
-    if request.method == "POST":
-        source_code = request.POST.get('code')
-        language = request.POST.get('language')
-        print(f'source_code: {source_code}')
-        print(f'language: {language}')
-    
-    response = {
-        "score": 10,
-        "time": "2023-01-11"
-    }
-
-    return JsonResponse(response)
+    # response = {
+    #     "score": 10,
+    #     "time": "2023-01-11"
+    # }
+    #
+    # return JsonResponse(response)
 
 
 def lobby(request):
