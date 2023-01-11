@@ -22,11 +22,16 @@
         </div>
     </section>
     <footer>
-        <p>대회까지 남은 시간 : </p>
-        <span id="remaining_time"></span>
+        <div id="remaining_time_place">
+            <p>대회까지 남은 시간 : </p>
+            <span id="remaining_time"></span>
+        </div>
     </footer>
 {% endblock %}
 
 {% block js %}
+    <script>
+        const contest_day = {{ contest_time }}
+    </script>
     <script src="{% static 'js/lobby.js' %}"></script>
 {% endblock %}
