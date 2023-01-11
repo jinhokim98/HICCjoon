@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 
 
 def index(request):
@@ -27,6 +28,37 @@ def signup(request):
         return redirect('PSP:index')
 
     return render(request, 'PSP/signup.html')
+
+
+def task(request, number: int = 1):
+    # print(request)
+    # print(request.method)
+    # if request.method == "POST":
+    #     source_code = request.POST.get('code')
+    #     language = request.POST.get('language')
+    #     print(f'source_code: {source_code}')
+    #     print(f'language: {language}')
+    args = dict()
+    args["task_index"] = number
+    return render(request, 'PSP/task.html', args)
+
+
+def task_submit(request):
+    print("-=-=-=-=-")
+    print(request)
+    print(request.method)
+    if request.method == "POST":
+        source_code = request.POST.get('code')
+        language = request.POST.get('language')
+        print(f'source_code: {source_code}')
+        print(f'language: {language}')
+    
+    response = {
+        "score": 10,
+        "time": "2023-01-11"
+    }
+
+    return JsonResponse(response)
 
 
 def lobby(request):
