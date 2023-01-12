@@ -26,4 +26,5 @@ urlpatterns = [
     path('task/<int:number>/', views.task, name='task'),
     path('monitoring/', views.monitoring, name='monitoring'),
     path('end/', views.end, name='end'),
+    path('enroll/', views.enroll, name='enroll'),
 ]
