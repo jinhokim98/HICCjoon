@@ -21,6 +21,10 @@ body{
 } */
 
 .main-section{
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+
     margin: 10px auto 10px auto;
     padding: 20px;
 
@@ -36,10 +40,24 @@ article div{
     margin: 2px;
 }
 
+a{
+    color: var(--main-theme-foreground);
+
+    text-decoration: none;
+}
+
+span{
+    display: flex;
+}
+
 #task-title, #solution-title{
     font-size: var(--task-title-size);
     font-weight: bold;
 } 
+
+#task-author{
+    float: right;
+}
 
 #language-container{
     display: inline;

@@ -13,12 +13,14 @@
         <div>남은 시간: {{ remaining_time }}</div>
     </header>
     {% for task in task_list %}
-    <button class="main-section" href="task/{{ task.index }}">
-        <span id="task-title">{{ task.index }}</span>
-        <span id="task-title">{{ task.name }}</span>
-        <span id="task-description">{{ task.author }}</span>
-    </button>
+    <a class="main-section" href="task/{{ task.index }}">
+        <span id="task-title">{{ task.index }}. {{ task.name }}</span>
+        <span id="task-author">{{ task.author }}</span>
+    </a>
     {% endfor %}
+    <button>
+        제출 완료
+    </button>
 {% endblock %}
 
 {% block js %}
