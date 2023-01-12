@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-import json
 from datetime import datetime
+
+from django.core.files.storage import FileSystemStorage
+import json
+
 
 def index(request):
     if request.method == "POST":
@@ -63,3 +66,18 @@ def monitoring(request):
 
 def end(request):
     return render(request, 'PSP/end.html')
+
+
+def enroll(request):
+    context = {}
+
+    if request.method == "POST":
+        prob_name = request.POST.get('prob_name')
+        uploaded_file = request.FILES['input_grading_file']
+        fs = FileSystemStorage(location='grading_file/')
+        fs.save(prob_name, uploaded_file)
+        context = {
+            'success': "file was uploaded successfully.",
+        }
+
+    return render(request, 'PSP/enroll.html', context)
