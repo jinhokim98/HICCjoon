@@ -31,7 +31,25 @@ def signup(request):
     return render(request, 'PSP/signup.html')
 
 
-def task(request, number: int = 1):
+class Task:
+    def __init__(self, index, name, author):
+        self.index = index
+        self.name = name
+        self.author = author
+
+
+def task_list(request):
+    args = dict()
+    task_list = [
+        Task(1, "test_problem 1", "me"),
+        Task(2, "test_problem 2", "you"),
+        Task(3, "test_problem 3", "he"),
+    ]
+    args["task_list"] = task_list
+    return render(request, 'PSP/task_list.html', args)
+
+
+def task_detail(request, number: int = 1):
     print(request)
     print(request.method)
     if request.method == "POST":
@@ -43,7 +61,7 @@ def task(request, number: int = 1):
 
     args = dict()
     args["task_index"] = number
-    return render(request, 'PSP/task.html', args)
+    return render(request, 'PSP/task_detail.html', args)
 
     # response = {
     #     "score": 10,
