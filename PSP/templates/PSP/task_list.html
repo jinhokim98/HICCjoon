@@ -3,24 +3,26 @@
 
 {% block css %}
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
-    <link rel="stylesheet" href="{% static 'css/task_list.css' %}">
+    <link rel="stylesheet" href="{% static 'css/task.css' %}">
     <!-- 아래 부분은 파일 분리 예정 -->
 {% endblock %}
 
 {% block content %}
-    <header class="main-section">
-        <!-- 남은 시간은 여기에-->
-        <div>남은 시간: {{ remaining_time }}</div>
-    </header>
-    {% for task in task_list %}
-    <a class="main-section" href="task/{{ task.index }}">
-        <span id="task-title">{{ task.index }}. {{ task.name }}</span>
-        <span id="task-author">{{ task.author }}</span>
-    </a>
-    {% endfor %}
-    <button>
-        제출 완료
-    </button>
+    <article class="main-section-container">
+        <section class="main-section">
+            <!-- 남은 시간은 여기에-->
+            <div>남은 시간: {{ remaining_time }}</div>
+        </section>
+        {% for task in task_list %}
+        <a class="main-section" href="task/{{ task.index }}">
+            <span id="task-title">{{ task.index }}. {{ task.name }}</span>
+            <span id="task-author">{{ task.author }}</span>
+        </a>
+        {% endfor %}
+        <button>
+            제출 완료
+        </button>
+    </article>
 {% endblock %}
 
 {% block js %}

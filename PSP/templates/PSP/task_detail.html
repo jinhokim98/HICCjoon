@@ -3,25 +3,25 @@
 
 {% block css %}
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
-    <link rel="stylesheet" href="{% static 'css/task_detail.css' %}">
+    <link rel="stylesheet" href="{% static 'css/task.css' %}">
     <!-- 아래 부분은 파일 분리 예정 -->
 {% endblock %}
 
 {% block content %}
-    <header class="main-section">
-        <!-- 남은 시간은 여기에-->
-        <div>남은 시간: {{ remaining_time }}</div>
-    </header>
-    <article class="main-section">
-        <div id="task-title">문제 {{ task_index }} {{ task_title }}</div>
-        <hr />
-        <div id="task-description">{{ task_description }}</div>
-    </article>
-    <article class="main-section">
-        <div>
+    <article class="main-section-container">
+        <section class="main-section">
+            <!-- 남은 시간은 여기에-->
+            <div>남은 시간: {{ remaining_time }}</div>
+        </section>
+        <section class="main-section">
+            <div id="task-title">문제 {{ task_index }} {{ task_title }}</div>
+            <hr />
+            <div id="task-description">{{ task_description }}</div>
+        </section>
+        <section class="main-section">
             <span id="solution-title">Solution</span>
 
-            <!-- language: python-->
+                <!-- language: python-->
             <div id="language-container">
                 <span>language</span>
                 <select id="language" name="language">
@@ -29,12 +29,14 @@
                     <option value="python">Python</option>
                 </select>
             </div>
-        </div>
-        <hr />
-        <div>
-            <pre><span contenteditable="true" name="code" id="code">int main(){}</span></pre>
-        </div>
-        <button id="submit">제출!</button>
+            <hr />
+            
+            <pre id="editor-pre">
+                <code contenteditable="true" name="code" id="editor-code">int main(){}</code>
+            </pre>
+            
+            <button id="submit">제출!</button>
+        </section>
     </article>
 {% endblock %}
 
