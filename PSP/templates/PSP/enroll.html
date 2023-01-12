@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <link rel="stylesheet" href="{% static 'css/enroll.css' %}">
+{% endblock %}
+
+{% block content %}
+    <header>
+        <h1>문제 등록</h1>
+    </header>
+    <section>
+        <form action="{% url 'PSP:enroll' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div id="form_inner">
+                <div id="prob_title">
+                    <div id="prob_name_place">
+                        <label for="prob_name">문제 이름</label>
+                        <p><input type="text" name="prob_name" id="prob_name" placeholder="문제 이름" required></p>
+                    </div>
+                    <div id="prob_score_place">
+                        <label for="score">점수</label>
+                        <p><input type="text" name="score" id="score" placeholder="점수" required ></p>
+                    </div>
+                </div>
+                <div id="prob_desc">
+                    <label for="desc">문제 설명</label>
+                    <p><textarea id="desc" name="desc" placeholder="문제를 입력하세요." required ></textarea></p>
+                </div>
+                <div id="io_example">
+                    <div id="input_place">
+                        <label for="input_example">input</label>
+                        <p><textarea name="input_example" id="input_example" required ></textarea></p>
+                    </div>
+                    <div id="output_place">
+                         <label for="output_example">output</label>
+                         <p><textarea name="output_example" id="output_example" required ></textarea></p>
+                    </div>
+                </div>
+                <div id="grading_file_place">
+                    <input type="file" name="input_grading_file" id="input_grading_file" class="file-upload" required/>
+                    <span id="file_uploaded">{{ success }}</span>
+                </div>
+                <div id="button_place">
+                    <button type="submit">문제 등록</button>
+                </div>
+            </div>
+        </form>
+    </section>
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}
