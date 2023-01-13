@@ -99,7 +99,7 @@ footer {
 #remaining_time_place {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     font-size: 20px;
     color: red;
 }
