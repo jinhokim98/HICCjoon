@@ -10,6 +10,7 @@
 {% block content %}
     <header>
         <h1>{{ username }}님 환영합니다!</h1>
+        <button type="button" onclick="location.href={% url 'PSP:enroll' %}">problem enroll</button>
     </header>
     <section>
         <div id="member_status">
