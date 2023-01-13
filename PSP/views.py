@@ -90,13 +90,15 @@ def enroll(request):
     context = {}
 
     if request.method == "POST":
+        prob_name = request.POST.get('prob_name')
+        prob_name_py = prob_name + ".py"
         uploaded_file = request.FILES['input_grading_file']
         fs = FileSystemStorage(location='grading_file/')
-        file_url = fs.url(fs.save(uploaded_file.name, uploaded_file))
+        fs.save(prob_name_py, uploaded_file)
 
         context = {
             'success': 'file uploaded successfully.',
-            'url': file_url,
+            'url': prob_name,
         }
 
     return render(request, 'PSP/enroll.html', context)
