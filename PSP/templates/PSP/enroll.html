@@ -21,7 +21,7 @@
                     </div>
                     <div id="prob_score_place">
                         <label for="score">점수</label>
-                        <p><input type="text" name="score" id="score" placeholder="점수" required ></p>
+                        <p><input type="number" name="score" id="score" placeholder="점수" min="0" max="100" required ></p>
                     </div>
                 </div>
                 <div id="prob_desc">
@@ -39,11 +39,12 @@
                     </div>
                 </div>
                 <div id="grading_file_place">
-                    <input type="file" name="input_grading_file" id="input_grading_file" class="file-upload" required/>
-                    <span id="file_uploaded">{{ success }}</span>
+                    <input type="file" name="input_grading_file" id="input_grading_file" class="file-upload"
+                           accept=".py" onchange="return valid_check();" required/>
+                    <span id="file_uploaded">{{ success }}{{ url }}</span>
                 </div>
                 <div id="button_place">
-                    <button type="submit">문제 등록</button>
+                    <button type="submit" id="submit_button">문제 등록</button>
                 </div>
             </div>
         </form>
@@ -51,5 +52,5 @@
 {% endblock %}
 
 {% block js %}
-
+    <script src="{% static 'js/enroll.js' %}"></script>
 {% endblock %}

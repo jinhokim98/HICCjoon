@@ -168,3 +168,8 @@ form #form_inner {
     width: 100px;
     height: 40px;
 }
+
+#file_uploaded {
+    margin-top: 10px;
+    color: red;
+}
