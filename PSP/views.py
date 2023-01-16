@@ -90,15 +90,27 @@ def enroll(request):
     context = {}
 
     if request.method == "POST":
-        prob_name = request.POST.get('prob_name')
-        prob_name_py = prob_name + ".py"
+        task_info = {
+            "문제 이름": request.POST.get('task_name'),
+            "문제 내용": request.POST.get('task_desc'),
+            "입력 예시": request.POST.get('input_example'),
+            "출력 예시": request.POST.get('output_example')
+        }
+
+        task_file_num = '00001'
+        task_file_path = f'task_file/{task_file_num}.json'
+
+        with open(task_file_path, 'w', encoding='utf-8') as outfile:
+            json.dump(task_info, outfile, indent="\t", ensure_ascii=False)
+
+        task_name_py = task_file_num + ".py"
         uploaded_file = request.FILES['input_grading_file']
         fs = FileSystemStorage(location='grading_file/')
-        fs.save(prob_name_py, uploaded_file)
+        fs.save(task_name_py, uploaded_file)
 
         context = {
             'success': 'file uploaded successfully.',
-            'url': prob_name,
+            'url': task_file_path,
         }
 
     return render(request, 'PSP/enroll.html', context)
