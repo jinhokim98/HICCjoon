@@ -14,19 +14,19 @@
         <form action="{% url 'PSP:enroll' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div id="form_inner">
-                <div id="prob_title">
-                    <div id="prob_name_place">
-                        <label for="prob_name">문제 이름</label>
-                        <p><input type="text" name="prob_name" id="prob_name" placeholder="문제 이름" required></p>
+                <div id="task_title">
+                    <div id="task_name_place">
+                        <label for="task_name">문제 이름</label>
+                        <p><input type="text" name="task_name" id="task_name" placeholder="문제 이름" required></p>
                     </div>
-                    <div id="prob_score_place">
+                    <div id="task_score_place">
                         <label for="score">점수</label>
-                        <p><input type="number" name="score" id="score" placeholder="점수" min="0" max="100" required ></p>
+                        <p><input type="number" name="task_score" id="score" min="1" value="100" required ></p>
                     </div>
                 </div>
-                <div id="prob_desc">
+                <div id="task_desc">
                     <label for="desc">문제 설명</label>
-                    <p><textarea id="desc" name="desc" placeholder="문제를 입력하세요." required ></textarea></p>
+                    <p><textarea id="desc" name="task_desc" placeholder="문제를 입력하세요." required ></textarea></p>
                 </div>
                 <div id="io_example">
                     <div id="input_place">

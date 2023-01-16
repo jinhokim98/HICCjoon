@@ -53,38 +53,38 @@ form #form_inner {
     height: 660px;
 }
 
-#prob_title {
+#task_title {
     position: relative;
     height: 70px;
     margin-bottom: 20px;
     padding: 10px;
 }
 
-#prob_name_place {
+#task_name_place {
     position: relative;
     float: left;
     width: 50%;
     height: 30px;
 }
 
-#prob_name_place p {
+#task_name_place p {
     margin: 5px 0 0 0;
 }
 
-#prob_name {
+#task_name {
     width: 100%;
     height: 20px;
     border: 1px solid #c6c6c6;
 }
 
-#prob_score_place {
+#task_score_place {
     position: relative;
     float: right;
     width: 20%;
     height: 30px;
 }
 
-#prob_score_place p {
+#task_score_place p {
     margin: 5px 0 0 0;
 }
 
@@ -94,12 +94,12 @@ form #form_inner {
     border: 1px solid #c6c6c6;
 }
 
-#prob_desc {
+#task_desc {
     height: 200px;
     padding: 10px;
 }
 
-#prob_desc p {
+#task_desc p {
      margin: 5px 0 0 0;
 }
 
