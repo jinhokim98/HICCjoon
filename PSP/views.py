@@ -6,6 +6,24 @@ from django.core.files.storage import FileSystemStorage
 import json
 
 
+def test(request):
+    return render(request, 'PSP/test.html')
+
+def test_back(request):
+    # fetch는 이렇게 받아야 하는갑다
+    req = json.loads(request.body)
+
+    if request.method == "POST":
+        print(f"title : {req['title']}")
+        print(f"body  : {req['body']}")
+        print(f"userid: {req['userid']}")
+    response = {
+        "score": 10,
+        "date_string": "2023-01-11",
+    }
+
+    return JsonResponse(response)
+
 def index(request):
     if request.method == "POST":
         id_ = request.POST.get('id_')
