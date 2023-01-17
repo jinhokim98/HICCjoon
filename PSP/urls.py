@@ -28,4 +28,5 @@ urlpatterns = [
     path('monitoring/', views.monitoring, name='monitoring'),
     path('end/', views.end, name='end'),
     path('enroll/', views.enroll, name='enroll'),
+    path('user_logout', views.user_logout, name='user_logout'),
 ]

@@ -69,3 +69,7 @@ function is_difference_password() {
 }
 
 document.getElementById("signup_btn").addEventListener('click', valid_check);
+
+if (id_duplicate === "True") {
+    alert("아이디 중복입니다.")
+}

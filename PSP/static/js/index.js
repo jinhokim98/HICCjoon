@@ -46,3 +46,11 @@ function show_nothing(valid) {
 }
 
 document.getElementById('login_btn').addEventListener('click', valid_check);
+
+if (Authenticate_fail === "True") {
+    alert("비밀번호가 다릅니다.");
+}
+
+if (DoesNotExist === "True") {
+    alert("존재하지 않는 계정입니다.");
+}

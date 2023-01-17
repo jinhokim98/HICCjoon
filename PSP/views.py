@@ -1,47 +1,84 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from datetime import datetime
+from .models import CustomUser
+from django.db.utils import IntegrityError
 
+from django.contrib.auth import login, logout
+from django.contrib.auth.hashers import check_password
 from django.core.files.storage import FileSystemStorage
 import json
 
 
 def index(request):
+    context = {
+        'Authenticate_fail': False,
+        'DoesNotExist': False
+    }
+
     if request.method == "POST":
         id_ = request.POST.get('id_')
         pw = request.POST.get('password')
 
-        # 로그인 입력으로 들어온 id_값으로 DB 검색
-        # id_, pw가 일치하지 않는 경우 두 가지 상황으로 나뉜다.
-        # id_가 DB에 등록되지 않은 경우, id는 DB에 등록됐지만 pw가 틀린 경우 나눠서 생각해줄 것
-        # 가급적 try, catch 문을 사용해서 위 두 가지 상황의 예외처리를 해주었으면 함.
-        # index.js로 형식에 맞지 않은 입력은 제어함, 형식은 맞지만 위 두 가지 문제가 있을 경우 에러정보를 넘겨줬으면 함
-        # 등록된 아이디가 없습니다. 비밀번호가 일치하지 않습니다와 같은 에러메세지를 출력하고 싶기 때문
-        # id_, pw 일치하는 경우 두 가지 상황으로 나뉜다.
-        # 우선 관리자, 일반 둘 다 정상적으로 로그인 한 후
-        # 관리자일 경우에는 monitoring.html로 리디렉션, 일반일 경우 lobby.html로 리디렉션
+        try:
+            user = CustomUser.objects.get(username=id_)
 
-        return redirect('PSP:lobby')
+            if not check_password(pw, user.password):
+                raise ValueError
 
-    return render(request, 'PSP/index.html')
+            login(request, user)
+            if user.is_staff:
+                return redirect('PSP:monitoring')
+            else:
+                return redirect('PSP:lobby')
+
+        except ValueError:
+            context.update({'Authenticate_fail': True})
+
+        except CustomUser.DoesNotExist:
+            context.update({'DoesNotExist': True})
+
+        # 구현 완료! (부족한 내용 있으면 알려주세요)
+        # 로그인 입력으로 들어온 id_값으로 DB 검색 (o)
+        # id_, pw가 일치하지 않는 경우 두 가지 상황으로 나뉜다. (o)
+        # id_가 DB에 등록되지 않은 경우, id는 DB에 등록됐지만 pw가 틀린 경우 나눠서 생각해줄 것 (o)
+        # 가급적 try, catch 문을 사용해서 위 두 가지 상황의 예외처리를 해주었으면 함. (o)
+        # index.js로 형식에 맞지 않은 입력은 제어함, 형식은 맞지만 위 두 가지 문제가 있을 경우 에러정보를 넘겨줬으면 함 (o)
+        # 등록된 아이디가 없습니다. 비밀번호가 일치하지 않습니다와 같은 에러메세지를 출력하고 싶기 때문 (o)
+        # id_, pw 일치하는 경우 두 가지 상황으로 나뉜다. (o)
+        # 우선 관리자, 일반 둘 다 정상적으로 로그인 한 후 (o)
+        # 관리자일 경우에는 monitoring.html로 리디렉션, 일반일 경우 lobby.html로 리디렉션 (o)
+
+    return render(request, 'PSP/index.html', context)
 
 
 def signup(request):
+    context = {'id_duplicate': False}
+
     if request.method == "POST":
         new_name = request.POST.get('join_name')
         new_id = request.POST.get('join_id')
         new_pw = request.POST.get('join_pw')
 
+        try:
+            CustomUser.objects.create_user(
+                username=new_id,
+                password=new_pw,
+                nickname=new_name
+            )
+            return redirect('PSP:index')
+
+        except IntegrityError:
+            context.update({'id_duplicate': True})
+
         # 기본적으로 형식에 맞지 않는 입력은 signup.js 에서 제어하고 있음
         # 추가적으로 DB와 연동해야만 알 수 있는 오류 (아이디 중복)정보를 넘겨주었으면 함
         # 아이디가 중복되었습니다 메세지를 출력하고 싶기 때문
         # 아이디 중복의 경우에는 DB에 저장하지 않고 에러메세지를 js로 전달해야 함
-        # 렌더함수가 호출되면 페이지가 재로딩되기 때문에 지금까지 입력한 정보들이 날아가서 불편함
+        # 렌더함수가 호출되면 페이지가 재로딩되기 때문에 지금까지 입력한 정보들이 날아가서 불편함 (해결방법.....)
         # 문제가 없는 경우 DB Member 테이블에 값을 저장하고 index.html로 리디렉션
 
-        return redirect('PSP:index')
-
-    return render(request, 'PSP/signup.html')
+    return render(request, 'PSP/signup.html', context)
 
 
 class Task:
@@ -165,3 +202,8 @@ def enroll(request):
         }
 
     return render(request, 'PSP/enroll.html', context)
+
+
+def user_logout(request):
+    logout(request)
+    return redirect('PSP:index')
