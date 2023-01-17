@@ -18,13 +18,19 @@
                     <div class="input_row">
                         <span class="material-symbols-outlined">badge</span>
                         <div class="blank"></div>
-                        <input type="text" name="id_" id="id_" class="input_text" placeholder="아이디" maxlength="20">
+                        <label for="id_" hidden></label>
+                        <input type="text" name="id_" id="id_" class="input_text" placeholder="아이디"
+                               minlength="4" maxlength="16" pattern="[a-zA-Z0-9]{4,16}" required>
                     </div>
                     <div class="input_row">
                         <span class="material-symbols-outlined">key</span>
                         <div class="blank"></div>
-                        <input type="password" name="password" id="password" class="input_text" placeholder="비밀번호" maxlength="15">
+                        <label for="password" hidden></label>
+                        <input type="password" name="password" id="password" class="input_text"
+                               placeholder="비밀번호" minlength="8" maxlength="16"
+                               pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$" required>
                     </div>
+                    <span id="error_message"></span>
                 </div>
                 <div id="buttons">
                     <button type="submit" id="login_btn">login</button>

@@ -106,6 +106,15 @@ section {
     font-size: 18px;
 }
 
+#error_message {
+    display: block;
+    height: 18px;
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 14px;
+    color: red;
+}
+
 #buttons {
     display: flex;
     justify-content: center;
