@@ -52,6 +52,12 @@ class Task:
 
 
 def task_list(request):
+    # 문제 목록을 보여주는 화면
+    # 현재 Task의 제목, 작성자 및 번호를 목록으로 표현합니다.
+    
+    # 현재 Task에 존재하는 레코드를 전부 가져와서 tasks라는 변수에 저장해주세요.
+    # 일단 임시로 Task라는 클래스를 만들어두었는데, DB에 맞게 편하게 수정하면 됩니다.
+    # 인출까지 완료했다면 그 뒤는 제가 인계받아 작업하겠습니다. 
     args = dict()
     task_list = [
         Task(1, "test_problem 1", "me"),
@@ -63,6 +69,11 @@ def task_list(request):
 
 
 def task_detail(request, number: int = 1):
+    # 문제 상세 정보를 보여주는 화면
+    # 현재 문제의 제목, 작성자, 상세 정보, 예제 입력 및 출력 등 상세 정보를 표현합니다.
+
+    # index가 number에 해당하는 Task 레코드를 가져와서 current_task라는 변수로 저장해주세요.
+    # 역시 Task는 편한 대로 수정하시면 됩니다.
     print(request)
     print(request.method)
     if request.method == "POST":
@@ -159,6 +170,9 @@ def enroll(request):
         fs = FileSystemStorage(location='grading_file/')
         fs.save(task_name_py, uploaded_file)
 
+        task_score = request.POST.get('task_score')
+        # task_file_num과 task_name, task_score 및 업로드 사용자 이름(추가 예정으로 보이네요)을 기반으로 DB에 등록해주세요.
+        
         context = {
             'success': 'file uploaded successfully.',
             'url': task_file_path,
