@@ -4,6 +4,7 @@ from datetime import datetime
 
 from django.core.files.storage import FileSystemStorage
 import json
+import time
 
 
 def test(request):
@@ -20,6 +21,7 @@ def test_back(request):
     response = {
         "score": 10,
         "date_string": "2023-01-11",
+        "current_time": time.ctime(),
     }
 
     return JsonResponse(response)

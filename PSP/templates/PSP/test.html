@@ -51,11 +51,14 @@ function interval_get_data(e){
     .then(data => {
         console.log(data.score);
         console.log(data.date_string);
+        console.log(data.current_time);
+        setTimeout(interval_get_data, 1000);
     })
     .catch(err => {
 
     });
 }
-interval_get_data();
+
+setTimeout(interval_get_data, 1000);
 </script>
 {% endblock %}
