@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block content %}
+{% if user.is_authenticated %}
     <article class="main-section-container">
         <section class="main-section">
             <!-- 남은 시간은 여기에-->
@@ -38,6 +39,11 @@
         </section>            
         <button id="submit">제출!</button>
     </article>
+{% else %}
+    <div class="login_error">
+        비정상적인 접근입니다. 로그인 후 이용하시기 바랍니다.
+    </div>
+{% endif %}
 {% endblock %}
 
 {% block js %}

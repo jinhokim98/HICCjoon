@@ -6,8 +6,9 @@
 {% endblock %}
 
 {% block content %}
+{% if user.is_authenticated %}
     <header>
-        <h1>{{ username }}님 환영합니다!</h1>
+        <h1>{{ user.nickname }}님 환영합니다!</h1>
     </header>
     <section>
         <div id="contest_rules">
@@ -27,6 +28,11 @@
             <span id="remaining_time"></span>
         </div>
     </footer>
+{% else %}
+    <div class="login_error">
+        비정상적인 접근입니다. 로그인 후 이용하시기 바랍니다.
+    </div>
+{% endif %}
 {% endblock %}
 
 {% block js %}

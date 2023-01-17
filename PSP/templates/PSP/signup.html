@@ -48,5 +48,8 @@
 {% endblock %}
 
 {% block js %}
+    <script>
+        const id_duplicate = "{{ id_duplicate| safe }}";
+    </script>
     <script src="{% static 'js/signup.js' %}"></script>
 {% endblock %}
