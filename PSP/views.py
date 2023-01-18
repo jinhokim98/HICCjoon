@@ -5,11 +5,15 @@ from datetime import datetime
 from django.core.files.storage import FileSystemStorage
 import json
 import time
+import os
+import sys
 
-
+# reference code
 def test(request):
     return render(request, 'PSP/test.html')
 
+
+# reference code
 def test_back(request):
     # fetch는 이렇게 받아야 하는갑다
     req = json.loads(request.body)
@@ -25,6 +29,7 @@ def test_back(request):
     }
 
     return JsonResponse(response)
+
 
 def index(request):
     if request.method == "POST":
@@ -97,11 +102,27 @@ def task_detail(request, number: int = 1):
     print(request)
     print(request.method)
     if request.method == "POST":
+        # 1. 파싱 및 데이터, 경로 정리
         data = json.loads(request.body)
-        print(f'language: {data["language"]}')
-        print(f'code: {data["code"]}')
-        print(f'task_no: {number}')
-        print(f'time: {datetime.now()}')  # 시간은 서버 시간 기준
+        extension = ".cpp" if data["language"] == "cpp" else ".py"
+        user_id = "test_user"  # user_name을 로그인 세션으로부터 가져와야 함
+        solution_file_path = f'solution_file/{user_id}/{str(str(number).zfill(5))}/' \
+                         f'{datetime.now().strftime("%Y%m%d_%H%M%S")}{extension}'
+        print(solution_file_path)
+
+        # 2. 없는 디렉터리 생성
+        solution_dir = os.path.dirname(solution_file_path)
+        os.makedirs(solution_dir, exist_ok=True)
+
+        # 3. 파일 작성
+        with open(solution_file_path, 'w', encoding='utf-8') as outfile:
+            outfile.write(data["code"])
+
+        # 4. os.fork로 분리
+        pid = os.fork()
+        if pid == 0:
+            # child process
+            sys.exit(0)
 
     args = dict()
     args["task_index"] = number
@@ -192,7 +213,7 @@ def enroll(request):
 
         task_score = request.POST.get('task_score')
         # task_file_num과 task_name, task_score 및 업로드 사용자 이름(추가 예정으로 보이네요)을 기반으로 DB에 등록해주세요.
-        
+
         context = {
             'success': 'file uploaded successfully.',
             'url': task_file_path,
