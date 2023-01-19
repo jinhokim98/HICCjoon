@@ -27,3 +27,24 @@ class CustomUser(AbstractUser, PermissionsMixin, TimestampedModel):
         return self.nickname
 
 
+class Task(models.Model):
+    tid = models.CharField(max_length=20, primary_key=True) #task_id
+    tname = models.TextField()
+    max_score = models.IntegerField()
+    mid = models.ForeignKey(CustomUser, on_delete=models.CASCADE) #출제자
+
+    def __str__(self):
+        return self.Task_text
+
+
+class Solution(models.Model):
+    sid = models.CharField(max_length=20, primary_key=True) #solution_id
+    mname = models.ForeignKey(CustomUser, on_delete=models.CASCADE) #user_name
+    tid = models.ForeignKey(Task, on_delete=models.CASCADE) #prob_index
+    language = models.TextField()
+    time = models.DateTimeField(auto_now_add=True)
+    score = models.IntegerField()
+    result = models.TextField()
+
+    def __str__(self):
+        return self.Solution_text
