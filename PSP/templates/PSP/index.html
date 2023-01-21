@@ -7,43 +7,50 @@
 {% endblock %}
 
 {% block content %}
-    <header>
-        <h1>HICC 프로그래밍 대회 플랫폼<br><strong id="HICCjoon">HICCjoon</strong></h1>
-    </header>
-    <section>
-        <form id="panel_item" action="{% url 'PSP:index' %}" method="post">
-            {% csrf_token %}
-            <div id="panel_inner">
-                <div id="id_pw_wrap">
-                    <div class="input_row">
-                        <span class="material-symbols-outlined">badge</span>
-                        <div class="blank"></div>
-                        <label for="id_" hidden></label>
-                        <input type="text" name="id_" id="id_" class="input_text" placeholder="아이디"
-                               minlength="4" maxlength="16" pattern="[a-zA-Z0-9]{4,16}" required>
-                    </div>
-                    <div class="input_row">
-                        <span class="material-symbols-outlined">key</span>
-                        <div class="blank"></div>
-                        <label for="password" hidden></label>
-                        <input type="password" name="password" id="password" class="input_text"
-                               placeholder="비밀번호" minlength="8" maxlength="16"
-                               pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$" required>
-                    </div>
-                    <span id="error_message"></span>
-                </div>
-                <div id="buttons">
-                    <button type="submit" id="login_btn">login</button>
-                    <div class="blank"></div>
-                    <button type="button" id="signup_btn" onclick="location.href={% url 'PSP:signup' %}">sign up</button>
-                </div>
+    <!-- Left Bar -->
+    <aside class="leftbar">
+        <div class="title">
+            <div class="logo">
+                <i class="fa-solid fa-computer"></i>
             </div>
+            <span>HICC</span>
+        </div>
+        <div class="desc">
+            <span class="hicc_hiccjoon">HICC 프로그래밍 대회 플랫폼</span>
+            <span class="hiccjoon">HICCjoon</span>
+        </div>
+    </aside>
+    <!-- Go Signup -->
+    <div class="go_signup">
+       <span class="comment">아직 계정이 없나요?</span>
+        <button type="button" class="signup_btn" onclick="location.href={% url 'PSP:signup' %}">Sign up</button>
+    </div>
+    <!-- Login -->
+    <section class="login">
+        <!-- Title -->
+        <div class="title">
+            <h1 class="welcome">Sign in to HICCjoon</h1>
+            <span class="login_msg">로그인이 필요합니다</span>
+        </div>
+        <!-- Panel -->
+        <form  action="{% url 'PSP:index' %}" method="post" class="panel">
+            {% csrf_token %}
+            <div class="input_row">
+                <label for="id_">ID</label>
+                <input type="text" name="id_" id="id_" placeholder="Your ID"
+                    minlength="4" maxlength="16" pattern="[a-zA-Z0-9]{4,16}" required>
+                <span class="id_error_msg"></span>
+            </div>
+            <div class="input_row">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password"
+                    placeholder="Your password" minlength="8" maxlength="16"
+                    pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$" required>
+                <span class="pw_error_msg"></span>
+            </div>
+            <button type="submit" class="login_btn">Login</button>
         </form>
     </section>
-
-    <footer>
-
-    </footer>
 {% endblock %}
 
 {% block js %}

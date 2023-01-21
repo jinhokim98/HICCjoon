@@ -1,5 +1,5 @@
-const login_id = document.getElementById("id_");
-const login_pw = document.getElementById("password");
+const login_id = document.querySelector("#id_");
+const login_pw = document.querySelector("#password");
 
 const login_row = {
     id_: {
@@ -31,21 +31,21 @@ function valid_check() {
 
 function show_error(invalid) {
     if (invalid === login_id) {
-        document.getElementById('error_message').textContent = "아이디 오류 : 4~16자의 영문, 숫자를 사용하세요.";
+        document.querySelector('.id_error_msg').textContent = "아이디 오류 : 4~16자의 영문, 숫자를 사용하세요.";
     } else if (invalid === login_pw) {
-        document.getElementById('error_message').textContent = "비밀번호 오류 : 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.";
+        document.querySelector('.pw_error_msg').textContent = "비밀번호 오류 : 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.";
     }
 }
 
 function show_nothing(valid) {
     if (valid === login_id) {
-        document.getElementById('error_message').textContent = "";
+        document.querySelector('.id_error_msg').textContent = "";
     } else if (valid === login_pw) {
-        document.getElementById('error_message').textContent = "";
+        document.querySelector('.pw_error_msg').textContent = "";
     }
 }
 
-document.getElementById('login_btn').addEventListener('click', valid_check);
+document.querySelector('.login_btn').addEventListener('click', valid_check);
 
 if (Authenticate_fail === "True") {
     alert("비밀번호가 다릅니다.");
