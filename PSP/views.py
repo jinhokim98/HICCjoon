@@ -156,10 +156,11 @@ def task_detail(request, number: int = 1):
             if extension == ".cpp":
                 # 0. setup path environment
                 compiler_path = os.path.abspath("Resource/Compiler/w64devkit")
+                compiler_bin_path = os.path.join(compiler_path, 'bin')
                 os.environ["W64DEVKIT"] = "1.17.0"
                 os.environ["W64DEVKIT_HOME"] = compiler_path
-                os.environ["PATH"] = os.path.join(compiler_path, 'bin') + ';' + os.environ["PATH"]
-                sys.path.append(os.path.join(compiler_path, 'bin'))
+                os.environ["PATH"] = compiler_bin_path + ';' + os.environ["PATH"]
+                print(os.environ["PATH"])
 
                 # 1. 파일 컴파일
                 args = ["g++.exe", "-o", program_path, os.path.abspath(solution_file_path)]
