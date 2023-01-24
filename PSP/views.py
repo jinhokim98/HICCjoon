@@ -1,3 +1,5 @@
+import subprocess
+
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from datetime import datetime
@@ -7,6 +9,13 @@ import json
 import time
 import os
 import sys
+
+# path management
+# solution_file/{user_id}/{task_number}/ : 사용자가 제출한 솔루션 파일
+# grading_file/{task_number}.py          : 채점용 데이터 파일
+# task_file/{task_file_num}.json         : 문제 파일f
+# log/compile                            : 컴파일 결과 출력/예외 로그
+# log/execute                            : 실행 결과 출력/예외 로그
 
 # reference code
 def test(request):
@@ -104,10 +113,12 @@ def task_detail(request, number: int = 1):
     if request.method == "POST":
         # 1. 파싱 및 데이터, 경로 정리
         data = json.loads(request.body)
+
+        current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
         extension = ".cpp" if data["language"] == "cpp" else ".py"
         user_id = "test_user"  # user_name을 로그인 세션으로부터 가져와야 함
-        solution_file_path = f'solution_file/{user_id}/{str(str(number).zfill(5))}/' \
-                         f'{datetime.now().strftime("%Y%m%d_%H%M%S")}{extension}'
+        solution_file_path = f'solution_file/{user_id}/{str(number).zfill(5)}/' \
+                         f'{current_time}{extension}'
         print(solution_file_path)
 
         # 2. 없는 디렉터리 생성
@@ -120,8 +131,91 @@ def task_detail(request, number: int = 1):
 
         # 4. os.fork로 분리
         pid = os.fork()
+
         if pid == 0:
-            # child process
+            # 0. path check
+            log_compile_dir = f"log/compile/{user_id}"  # user_id/datetime.extension
+            log_execute_dir = f"log/execute/{user_id}"
+
+            program_path = f"temp/program/program"
+
+            os.makedirs(log_compile_dir, exist_ok=True)
+            os.makedirs(log_execute_dir, exist_ok=True)
+            # compile_stdout = "compile_output.txt"  # temp/compile_log/{user_id}/{number}/{datetime}_output.txt
+            # compile_stderr = "compile_error.txt"
+            # execute_stdout = "execute_output.txt"
+            # execute_stderr = "execute_error.txt"
+
+            score = 0
+            result_summary = ""
+            result_detail = ""
+            args = []
+
+            # =================================
+            # 컴파일
+            # =================================
+            if extension == ".cpp":
+                # 0. setup path environment
+                compiler_path = os.path.abspath("Resource/Compiler/w64devkit")
+                os.environ["W64DEVKIT"] = "1.17.0"
+                os.environ["W64DEVKIT_HOME"] = compiler_path
+                os.environ["PATH"] = os.path.join(compiler_path, 'bin') + ';' + os.environ["PATH"]
+
+                # 1. 파일 컴파일
+                args = ["g++.exe", "o-", program_path, solution_file_path]
+
+                compile_stdout = (os.path.join(log_compile_dir, str(number), current_time + "_output.txt"))
+                compile_stderr = (os.path.join(log_compile_dir, str(number), current_time + "_error.txt"))
+
+                with open(compile_stdout, 'w') as stdout:
+                    with open(compile_stderr, 'w') as stderr:
+                        subprocess.run(args, shell=True, stdout=stdout, stderr=stderr)
+
+                # 1.2 에러 있는지 확인
+
+                args = [program_path]
+
+            elif extension == ".py":
+                # 0. setup path environment
+
+                args = ["python", solution_file_path]
+
+            # =================================
+            # 실행
+            # =================================
+
+            # 3. 실행(프로그램 실행)
+            execute_stdout = os.path.join(log_execute_dir, str(number), current_time + "_execute_output.txt")
+            execute_stderr = os.path.join(log_execute_dir, str(number), current_time + "_execute_error.txt")
+            execute_stdin = os.path.join("input_file", f"{number}.txt")
+
+            with open(execute_stdin, 'r') as stdin:
+                with open(execute_stdout, 'w') as stdout:
+                    with open(execute_stderr, 'w') as stderr:
+                        process = subprocess.run(args, shell=True, stdin=stdin, stdout=stdout, stderr=stderr)
+
+            # =================================
+            # 채점
+            # =================================
+
+            judge_stdin = execute_stdout
+            judge_stdout = os.path.join(log_execute_dir, str(number), current_time + "_judge_score.txt")
+            judge_stderr = os.path.join(log_execute_dir, str(number), current_time + "_judge_error.txt")
+            judge_file_path = os.path.join('grading_file', f"{str(number).zfill(5)}.py")
+            args = ["python", judge_file_path]
+
+            # 2. 테스트 및 채점(프로세스 실행)
+            with open(judge_stdin, 'r') as stdin:
+                with open(judge_stdout, 'w') as stdout:
+                    with open(judge_stderr, 'w') as stderr:
+                        process = subprocess.run(args, shell=True, stdin=stdin, stdout=stdout, stderr=stderr)
+
+            with open(judge_stdout, 'r') as result_file:
+                score = int(result_file.readline().strip())
+
+            print("score: " + str(score))
+
+            # 4. DB 저장
             sys.exit(0)
 
     args = dict()
