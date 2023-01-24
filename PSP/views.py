@@ -8,6 +8,7 @@ from django.core.files.storage import FileSystemStorage
 import json
 import time
 import os
+import threading
 import sys
 
 # path management
@@ -132,22 +133,17 @@ def task_detail(request, number: int = 1):
         with open(solution_file_path, 'w', encoding='utf-8') as outfile:
             outfile.write(data["code"])
 
-        # 4. os.fork로 분리
-        pid = os.fork()
-
-        if pid == 0:
+        # 4. thread로 분리
+        def run_solution(number_str):
             # 0. path check
-            log_compile_dir = f"log/compile/{user_id}"  # user_id/datetime.extension
-            log_execute_dir = f"log/execute/{user_id}"
+            log_compile_dir = f"log/compile/{user_id}/{number_str}"  # user_id/datetime.extension
+            log_execute_dir = f"log/execute/{user_id}/{number_str}"
 
-            program_path = f"temp/program/program"
+            program_path = os.path.abspath(f"temp/program/program")
 
+            os.makedirs(f"temp/program", exist_ok=True)
             os.makedirs(log_compile_dir, exist_ok=True)
             os.makedirs(log_execute_dir, exist_ok=True)
-            # compile_stdout = "compile_output.txt"  # temp/compile_log/{user_id}/{number}/{datetime}_output.txt
-            # compile_stderr = "compile_error.txt"
-            # execute_stdout = "execute_output.txt"
-            # execute_stderr = "execute_error.txt"
 
             score = 0
             result_summary = ""
@@ -163,12 +159,14 @@ def task_detail(request, number: int = 1):
                 os.environ["W64DEVKIT"] = "1.17.0"
                 os.environ["W64DEVKIT_HOME"] = compiler_path
                 os.environ["PATH"] = os.path.join(compiler_path, 'bin') + ';' + os.environ["PATH"]
+                sys.path.append(os.path.join(compiler_path, 'bin'))
 
                 # 1. 파일 컴파일
-                args = ["g++.exe", "o-", program_path, solution_file_path]
+                args = ["g++.exe", "-o", program_path, os.path.abspath(solution_file_path)]
+                print(f'args: {args}')
 
-                compile_stdout = (os.path.join(log_compile_dir, number_str, current_time + "_output.txt"))
-                compile_stderr = (os.path.join(log_compile_dir, number_str, current_time + "_error.txt"))
+                compile_stdout = (os.path.join(log_compile_dir, current_time + "_output.txt"))
+                compile_stderr = (os.path.join(log_compile_dir, current_time + "_error.txt"))
 
                 with open(compile_stdout, 'w') as stdout:
                     with open(compile_stderr, 'w') as stderr:
@@ -188,38 +186,41 @@ def task_detail(request, number: int = 1):
             # =================================
 
             # 3. 실행(프로그램 실행)
-            execute_stdout = os.path.join(log_execute_dir, number_str, current_time + "_execute_output.txt")
-            execute_stderr = os.path.join(log_execute_dir, number_str, current_time + "_execute_error.txt")
+            execute_stdout = os.path.join(log_execute_dir, current_time + "_execute_output.txt")
+            execute_stderr = os.path.join(log_execute_dir, current_time + "_execute_error.txt")
             execute_stdin = os.path.join("input_file", f"{number_str}.txt")
 
             with open(execute_stdin, 'r') as stdin:
                 with open(execute_stdout, 'w') as stdout:
                     with open(execute_stderr, 'w') as stderr:
-                        process = subprocess.run(args, shell=True, stdin=stdin, stdout=stdout, stderr=stderr)
+                        subprocess.run(args, shell=True, stdin=stdin, stdout=stdout, stderr=stderr)
 
             # =================================
             # 채점
             # =================================
 
             judge_stdin = execute_stdout
-            judge_stdout = os.path.join(log_execute_dir, str(number), current_time + "_judge_score.txt")
-            judge_stderr = os.path.join(log_execute_dir, str(number), current_time + "_judge_error.txt")
-            judge_file_path = os.path.join('grading_file', f"{str(number).zfill(5)}.py")
+            judge_stdout = os.path.join(log_execute_dir, current_time + "_judge_score.txt")
+            judge_stderr = os.path.join(log_execute_dir, current_time + "_judge_error.txt")
+            judge_file_path = os.path.join('grading_file', f"{number_str}.py")
+
             args = ["python", judge_file_path]
 
             # 2. 테스트 및 채점(프로세스 실행)
             with open(judge_stdin, 'r') as stdin:
                 with open(judge_stdout, 'w') as stdout:
                     with open(judge_stderr, 'w') as stderr:
-                        process = subprocess.run(args, shell=True, stdin=stdin, stdout=stdout, stderr=stderr)
+                        subprocess.run(args, shell=True, stdin=stdin, stdout=stdout, stderr=stderr)
 
             with open(judge_stdout, 'r') as result_file:
                 score = int(result_file.readline().strip())
 
-            print("score: " + str(score))
+            print("final score: " + str(score))
 
             # 4. DB 저장
-            sys.exit(0)
+
+        t = threading.Thread(target=run_solution, args=tuple([number_str]))
+        t.start()
 
     task_file = f'task_file/{number_str}.json'
 
