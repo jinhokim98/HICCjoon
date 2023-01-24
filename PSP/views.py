@@ -138,12 +138,14 @@ def task_detail(request, number: int = 1):
             # 0. path check
             log_compile_dir = f"log/compile/{user_id}/{number_str}"  # user_id/datetime.extension
             log_execute_dir = f"log/execute/{user_id}/{number_str}"
+            log_judge_dir = f"log/judge/{user_id}/{number_str}"
 
             program_path = os.path.abspath(f"temp/program/program")
 
             os.makedirs(f"temp/program", exist_ok=True)
             os.makedirs(log_compile_dir, exist_ok=True)
             os.makedirs(log_execute_dir, exist_ok=True)
+            os.makedirs(log_judge_dir, exist_ok=True)
 
             score = 0
             result_summary = ""
@@ -160,9 +162,11 @@ def task_detail(request, number: int = 1):
                 os.environ["W64DEVKIT"] = "1.17.0"
                 os.environ["W64DEVKIT_HOME"] = compiler_path
                 os.environ["PATH"] = compiler_bin_path + ';' + os.environ["PATH"]
-                print(os.environ["PATH"])
 
                 # 1. 파일 컴파일
+                if os.path.exists(program_path + ".exe"):
+                    os.remove(program_path + ".exe")
+
                 args = ["g++.exe", "-o", program_path, os.path.abspath(solution_file_path)]
                 print(f'args: {args}')
 
@@ -187,8 +191,8 @@ def task_detail(request, number: int = 1):
             # =================================
 
             # 3. 실행(프로그램 실행)
-            execute_stdout = os.path.join(log_execute_dir, current_time + "_execute_output.txt")
-            execute_stderr = os.path.join(log_execute_dir, current_time + "_execute_error.txt")
+            execute_stdout = os.path.join(log_execute_dir, current_time + "_output.txt")
+            execute_stderr = os.path.join(log_execute_dir, current_time + "_error.txt")
             execute_stdin = os.path.join("input_file", f"{number_str}.txt")
 
             with open(execute_stdin, 'r') as stdin:
@@ -201,8 +205,8 @@ def task_detail(request, number: int = 1):
             # =================================
 
             judge_stdin = execute_stdout
-            judge_stdout = os.path.join(log_execute_dir, current_time + "_judge_score.txt")
-            judge_stderr = os.path.join(log_execute_dir, current_time + "_judge_error.txt")
+            judge_stdout = os.path.join(log_judge_dir, current_time + "_output.txt")
+            judge_stderr = os.path.join(log_judge_dir, current_time + "_error.txt")
             judge_file_path = os.path.join('grading_file', f"{number_str}.py")
 
             args = ["python", judge_file_path]
