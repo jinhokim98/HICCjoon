@@ -110,6 +110,9 @@ def task_detail(request, number: int = 1):
     # 역시 Task는 편한 대로 수정하시면 됩니다.
     print(request)
     print(request.method)
+
+    number_str = str(number).zfill(5)
+
     if request.method == "POST":
         # 1. 파싱 및 데이터, 경로 정리
         data = json.loads(request.body)
@@ -117,7 +120,7 @@ def task_detail(request, number: int = 1):
         current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
         extension = ".cpp" if data["language"] == "cpp" else ".py"
         user_id = "test_user"  # user_name을 로그인 세션으로부터 가져와야 함
-        solution_file_path = f'solution_file/{user_id}/{str(number).zfill(5)}/' \
+        solution_file_path = f'solution_file/{user_id}/{number_str}/' \
                          f'{current_time}{extension}'
         print(solution_file_path)
 
@@ -164,8 +167,8 @@ def task_detail(request, number: int = 1):
                 # 1. 파일 컴파일
                 args = ["g++.exe", "o-", program_path, solution_file_path]
 
-                compile_stdout = (os.path.join(log_compile_dir, str(number), current_time + "_output.txt"))
-                compile_stderr = (os.path.join(log_compile_dir, str(number), current_time + "_error.txt"))
+                compile_stdout = (os.path.join(log_compile_dir, number_str, current_time + "_output.txt"))
+                compile_stderr = (os.path.join(log_compile_dir, number_str, current_time + "_error.txt"))
 
                 with open(compile_stdout, 'w') as stdout:
                     with open(compile_stderr, 'w') as stderr:
@@ -185,9 +188,9 @@ def task_detail(request, number: int = 1):
             # =================================
 
             # 3. 실행(프로그램 실행)
-            execute_stdout = os.path.join(log_execute_dir, str(number), current_time + "_execute_output.txt")
-            execute_stderr = os.path.join(log_execute_dir, str(number), current_time + "_execute_error.txt")
-            execute_stdin = os.path.join("input_file", f"{number}.txt")
+            execute_stdout = os.path.join(log_execute_dir, number_str, current_time + "_execute_output.txt")
+            execute_stderr = os.path.join(log_execute_dir, number_str, current_time + "_execute_error.txt")
+            execute_stdin = os.path.join("input_file", f"{number_str}.txt")
 
             with open(execute_stdin, 'r') as stdin:
                 with open(execute_stdout, 'w') as stdout:
@@ -218,16 +221,21 @@ def task_detail(request, number: int = 1):
             # 4. DB 저장
             sys.exit(0)
 
+    task_file = f'task_file/{number_str}.json'
+
     args = dict()
     args["task_index"] = number
-    return render(request, 'PSP/task_detail.html', args)
 
-    # response = {
-    #     "score": 10,
-    #     "time": "2023-01-11"
-    # }
-    #
-    # return JsonResponse(response)
+    if os.path.exists(task_file):
+        json_data = dict()
+        with open(task_file, 'r', encoding='utf-8') as json_fp:
+            json_data = json.load(json_fp)
+            args["task_title"] = json_data["문제 이름"]
+            args["task_article"] = json_data["문제 내용"]
+            args["example_input"] = json_data["입력 예시"]
+            args["example_output"] = json_data["출력 예시"]
+
+    return render(request, 'PSP/task_detail.html', args)
 
 
 def lobby(request):

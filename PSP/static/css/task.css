@@ -24,7 +24,7 @@ body{
 .main-section{
     display: flex;
     flex-wrap: wrap;
-    /* flex-direction: column; */
+    flex-direction: column;
     align-items: baseline;
     justify-content: space-between;
 
@@ -35,6 +35,12 @@ body{
     border-radius: 5px;
 
     background-color: var(--main-theme-background);
+}
+
+.main-section-header{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
 }
 
 article div{
@@ -75,6 +81,7 @@ button{
 
 #language-container{
     display: flex;
+    align-items: flex-end;
 }
 
 #language-container span{
@@ -82,6 +89,8 @@ button{
 }
 
 hr{
+    display: flex;
+    flex-direction: column;
     width: 98%;
     margin: 10px auto 10px auto;
     border-bottom: 0 0 1px 0 solid var(--main-theme-foreground);
