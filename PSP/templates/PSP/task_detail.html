@@ -11,8 +11,7 @@
 {% if user.is_authenticated %}
     <article class="main-section-container">
         <section class="main-section">
-            <!-- 남은 시간은 여기에-->
-            <div>남은 시간: {{ remaining_time }}</div>
+            <div id="remaining_time"></div>
         </section>
         <section class="main-section">
             <div id="task-title">문제 {{ task_index }} {{ task_title }}</div>
@@ -64,5 +63,8 @@
     <!-- <link rel="stylesheet" href="highlight/styles/default.min.css">
     <script src="highlight/highlight.min.js"></script> -->
     <!-- <script>hljs.highlightElement(document.getElementById("code"));</script> -->
+    <script>
+        const contest_end_time = new Date({{ contest_end_time }});
+    </script>
     <script src="{% static 'js/task_detail.js' %}"></script>
 {% endblock %}

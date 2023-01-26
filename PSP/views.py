@@ -22,6 +22,10 @@ import sys
 # log/compile                            : 컴파일 결과 출력/예외 로그
 # log/execute                            : 실행 결과 출력/예외 로그
 
+contest_start_time = datetime(2023, 1, 26, 15, 30, 00)
+contest_end_time = datetime(2023, 1, 26, 16, 35, 00)
+
+
 # reference code
 def test(request):
     return render(request, 'PSP/test.html')
@@ -121,6 +125,7 @@ def task_list(request):
         Task(3, "test_problem 3", "he"),
     ]
     args["task_list"] = task_list
+    args["contest_end_time"] = int(time.mktime(contest_end_time.timetuple())) * 1000
     return render(request, 'PSP/task_list.html', args)
 
 
@@ -252,6 +257,7 @@ def task_detail(request, number: int = 1):
 
     args = dict()
     args["task_index"] = number
+    args["contest_end_time"] = int(time.mktime(contest_end_time.timetuple())) * 1000
 
     if os.path.exists(task_file):
         json_data = dict()
@@ -267,27 +273,20 @@ def task_detail(request, number: int = 1):
 
 def lobby(request):
     context = {}
-    contest_start_time = datetime(2023, 1, 27, 14, 54, 00)
-    contest_end_time = datetime(2023, 1, 27, 15, 45, 00)
-    current_time = datetime.now()
-
     contest_start_time_ = int(time.mktime(contest_start_time.timetuple())) * 1000
     context = {'time': contest_start_time_}
 
-    # 추가로 대회가 시작한 이후와 대회가 종료된 이후에는 이 페이지로 들어올 수 없다.
-    # 대회 시작시간이 지났는지 확인하는 변수를 만들어서 넘겨줬으면 함
-
     if request.method == "POST":
-        current_time_ = datetime.now()
+        current_time = datetime.now()
         response = {'contest': " "}
 
-        if contest_start_time > current_time_:
+        if contest_start_time > current_time:
             response.update({'contest': "before"})
 
-        if contest_start_time < current_time_ < contest_end_time:
+        if contest_start_time < current_time < contest_end_time:
             response.update({'contest': "in_process"})
 
-        if contest_end_time < current_time_:
+        if contest_end_time < current_time:
             response.update({'contest': "end"})
 
         return JsonResponse(response)
@@ -364,3 +363,17 @@ def enroll(request):
 def user_logout(request):
     logout(request)
     return redirect('PSP:index')
+
+
+def task_timecheck(request):
+    if request.method == "POST":
+        current_time = datetime.now()
+        response = {'contest': " "}
+
+        if contest_start_time < current_time < contest_end_time:
+            response.update({'contest': "in_process"})
+
+        if contest_end_time < current_time:
+            response.update({'contest': "end"})
+
+        return JsonResponse(response)
