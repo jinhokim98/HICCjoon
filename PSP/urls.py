@@ -30,5 +30,5 @@ urlpatterns = [
     path('enroll/', views.enroll, name='enroll'),
     path('test/', views.test, name='test'),
     path('test_back/', views.test_back, name='test_back'),
-    path('user_logout', views.user_logout, name='user_logout'),
+    path('user_logout/', views.user_logout, name='user_logout'),
 ]

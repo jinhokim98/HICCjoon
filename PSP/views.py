@@ -267,23 +267,30 @@ def task_detail(request, number: int = 1):
 
 def lobby(request):
     context = {}
-    contest_start_time = datetime(2023, 1, 26, 11, 43, 00)
-    contest_end_time = datetime(2023, 1, 26, 12, 45, 00)
+    contest_start_time = datetime(2023, 1, 27, 14, 54, 00)
+    contest_end_time = datetime(2023, 1, 27, 15, 45, 00)
     current_time = datetime.now()
-    if contest_end_time < current_time:
-        # print(1)
-        return redirect('PSP:index')
-    if contest_start_time < current_time:
-        # print(2)
-        return redirect('PSP:task')
-    contest_start_time = int(time.mktime(contest_start_time.timetuple())) * 1000
-    # print(3)
-    print(contest_start_time)
-    context = {'time': contest_start_time}
-    # 추가로 페이지 하단에 대회까지 남은 시간을 보여주고 있다.
-    # 대회 시작시간을 DB에서 가져오려 했지만 contest 테이블이 사라졌기 때문에 여기서 대회 시간을 넘겨주었으면 함
+
+    contest_start_time_ = int(time.mktime(contest_start_time.timetuple())) * 1000
+    context = {'time': contest_start_time_}
+
     # 추가로 대회가 시작한 이후와 대회가 종료된 이후에는 이 페이지로 들어올 수 없다.
     # 대회 시작시간이 지났는지 확인하는 변수를 만들어서 넘겨줬으면 함
+
+    if request.method == "POST":
+        current_time_ = datetime.now()
+        response = {'contest': " "}
+
+        if contest_start_time > current_time_:
+            response.update({'contest': "before"})
+
+        if contest_start_time < current_time_ < contest_end_time:
+            response.update({'contest': "in_process"})
+
+        if contest_end_time < current_time_:
+            response.update({'contest': "end"})
+
+        return JsonResponse(response)
 
     return render(request, 'PSP/lobby.html', context)
 

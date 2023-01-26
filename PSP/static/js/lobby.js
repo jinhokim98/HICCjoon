@@ -1,11 +1,7 @@
 const remaining_time = document.getElementById('remaining_time');
 
 function remaining_timer() {
-    // views.py 에서 대회 시간 받아 오면 new Date(contest_day)로 치환할 예정
-    // contest_day 는 yyyy-mm-dd hh:mm:ss 로 formatting
-    console.log(contest_day)
     const now = new Date();
-
     const diff = contest_day - now;
 
     const diff_day = String(Math.floor(diff / (1000*60*60*24)));
@@ -22,3 +18,54 @@ function start_timer() {
 }
 
 document.addEventListener('DOMContentLoaded', start_timer);
+
+// https://codong.tistory.com/28
+// https://nachwon.github.io/how-to-send-csrf-token-ajax/
+function get_cookie(name) {
+    let cookie_value = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookie_value = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookie_value;
+}
+
+const csrf_token = get_cookie('csrftoken');
+
+
+function page_move() {
+    // URL, META
+fetch('lobby/', {
+    method: "POST", 	// GET도 넣을 수는 있지만 안넣어도 상관없다. default는 get
+    headers: {
+        "Content-Type": "application/json",	// json형식의 값을 넘겨줌을 header에 명시
+        "X-CSRFToken": csrf_token,
+    },
+    body: JSON.stringify({	//javascript 객체를 json객체로 변환한다.
+    title: "Current Time",
+    }),
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log(data.contest);
+        if (data.contest === "in_process") {
+            window.location.replace('task/');
+        }
+        else if (data.contest === "end") {
+            window.location.replace('end/');
+        }
+        setTimeout(page_move, 1000);
+    })
+    .catch(err => {
+
+    });
+}
+
+setTimeout(page_move, 1000);
