@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block content %}
+{% if user.is_authenticated and user.is_staff %}
     <header>
         <h1><a href="{% url 'PSP:monitoring' %}">문제 등록</a></h1>
     </header>
@@ -49,6 +50,11 @@
             </div>
         </form>
     </section>
+{% else %}
+    <div class="login_error">
+        비정상적인 접근입니다. 해당 페이지에 접근하기 위해서는 관리자의 권한이 필요합니다.
+    </div>
+{% endif %}
 {% endblock %}
 
 {% block js %}

@@ -8,8 +8,9 @@
 {% endblock %}
 
 {% block content %}
+{% if user.is_authenticated and user.is_staff %}
     <header>
-        <h1>{{ username }}님 환영합니다!</h1>
+        <h1>{{ user.nickname }}님 환영합니다!</h1>
         <button type="button" onclick="location.href={% url 'PSP:enroll' %}">problem enroll</button>
     </header>
     <section>
@@ -68,6 +69,11 @@
             <span id="remaining_time"></span>
         </div>
     </footer>
+{% else %}
+    <div class="login_error">
+        비정상적인 접근입니다. 해당 페이지에 접근하기 위해서는 관리자의 권한이 필요합니다.
+    </div>
+{% endif %}
 {% endblock %}
 
 {% block js %}

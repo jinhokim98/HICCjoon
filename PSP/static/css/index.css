@@ -1,143 +1,183 @@
 @font-face {
-        font-family: 'GangwonEdu_OTFBoldA';
-        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEdu_OTFBoldA.woff') format('woff');
-        font-weight: normal;
-        font-style: normal;
+    font-family: 'GangwonEdu_OTFBoldA';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEdu_OTFBoldA.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
 }
 
-body {
-    font-family: GangwonEdu_OTFBoldA, sans-serif;
+:root {
+    /* color */
+    --white-color: #fff;
+    --black-color: #140a00;
+    --blue-color: #a2d2e2;
+    --blue-light-color: #EBF5FB;
+    --purple-light-color: #FBF8FD;
+    --grey-light-color:#C2C3CF;
+    --red-color: #ff0000;
+
+
+    /* size */
+    --padding-left: 12px;
+
+    /* font size */
+    --logo-size: 35px;
+    --font-extra: 24px;
+    --font-large: 18px;
+    --font-medium-large: 16px;
+    --font-medium: 14px;
+    --font-small: 12px;
+    --font-micro: 10px;
+}
+
+* {
+    padding: 0;
     margin: 0;
-    padding: 0;
-}
-
-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 200px;
-    font-size: 30px;
-}
-
-h1 {
-    text-align: center;
-}
-
-#HICCjoon {
-    color: blue;
-}
-
-section {
-    position: relative;
-    width: 100%;
-    height: 300px;
-}
-
-#panel_item {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 500px;
-    height: 300px;
-    border: 1px solid #c6c6c6;
-    border-radius: 6px;
-    background-color: #fff;
-    box-shadow: 0 5px 8px 0 rgb(68 68 68 / 4%);
-}
-
-#panel_inner {
-    padding: 20px 28px;
-    height: 260px;
-}
-
-#id_pw_wrap {
-    margin: 40px 0 0 0;
-    padding: 0;
-    width: 100%;
-    height: 105px;
-    border: 1px solid #c6c6c6;
-    border-radius: 6px;
-    background-color: #fff;
-    box-shadow: 0 5px 8px 0 rgb(68 68 68 / 4%);
-}
-
-#id_pw_wrap .input_row {
-    display: flex;
-    width: 100%;
-    padding: 14px 17px 13px;
     box-sizing: border-box;
 }
 
-#id_pw_wrap .input_row:first-child {
-    border-radius: 6px 6px 0 0;
+body {
+    font-family: 'GangwonEdu_OTFBoldA', sans-serif;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 4fr 6fr;
+    grid-template-rows: 1fr 7fr;
+    grid-template-areas:
+    'leftbar go_signup'
+    'leftbar login';
 }
 
-#id_pw_wrap .input_row:last-child {
-    border-radius: 0 0 6px 6px;
+.leftbar {
+    grid-area: leftbar;
+    background-color: var(--blue-color);
 }
 
-.input_row {
-    position: relative;
-    border: 1px solid #dadada;
-    text-align: left;
-}
-
-.input_row .blank {
-    width: 20px;
-    height: 10px;
-}
-
-#id_ {
-    width: 100%;
-    border: none;
-    outline: none;
-}
-
-#password {
-    width: 100%;
-    border: none;
-    outline: none;
-}
-
-.input_text {
-    font-family: GangwonEdu_OTFBoldA, sans-serif;
-    font-size: 18px;
-}
-
-#error_message {
-    display: block;
-    height: 18px;
-    margin-top: 8px;
-    font-size: 14px;
-    line-height: 14px;
-    color: red;
-}
-
-#buttons {
+.leftbar .title {
     display: flex;
-    justify-content: center;
     align-items: center;
-    width: 100%;
-    height: 100px;
+    margin-left: 3rem;
+    height: 25%;
 }
 
-#login_btn {
-    width: 100px;
-    height: 40px;
-    font-family: GangwonEdu_OTFBoldA, sans-serif;
-    font-size: 20px;
+.leftbar .title .logo {
+    font-size: var(--logo-size);
+    color: var(--black-color);
 }
 
-#buttons .blank {
-    width: 50px;
-    height: 20px;
+.leftbar .title span {
+    font-size: var(--logo-size);
+    color: var(--black-color);
+    padding: var(--padding-left);
 }
 
-#signup_btn {
-    width: 100px;
-    height: 40px;
-    font-family: GangwonEdu_OTFBoldA, sans-serif;
-    font-size: 20px;
+.leftbar .desc {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin-left: 3rem;
+}
+
+.leftbar .desc .hicc_hiccjoon{
+    font-size: var(--font-extra);
+    color: var(--black-color);
+}
+
+.leftbar .desc .hiccjoon {
+    font-size: var(--logo-size);
+    color: var(--black-color);
+}
+
+.go_signup {
+    grid-area: go_signup;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 1rem;
+}
+
+.go_signup .comment {
+    margin-right: 1rem;
+    font-size: var(--font-medium);
+}
+
+.go_signup .signup_btn {
+    padding: 8px 12px;
+    border: 1px solid;
+    border-color: var(--grey-light-color);
+    border-radius: 10%;
+    background-color: transparent;
+}
+
+.go_signup .signup_btn:hover {
+    background-color: var(--blue-color);
+}
+
+.login {
+    grid-area: login;
+    display: flex;
+    flex-direction: column;
+    margin-left: 3rem;
+}
+
+.login .title {
+    display: flex;
+    flex-direction: column;
+    height: 30%;
+    padding-top: 4rem;
+}
+
+.login .title h1 {
+    padding: 4px 0;
+    font-size: 28px;
+}
+
+.login .title span {
+    padding: 4px 0;
+    font-size: var(--font-medium);
+}
+
+.login .panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-top: 2rem;
+}
+
+.login .panel .input_row {
+    display: flex;
+    flex-direction: column;
+    height: 30%;
+}
+
+.login .panel .input_row label {
+    font-size: var(--font-large);
+    margin-bottom: 5px;
+}
+
+.login .panel .input_row input {
+    width: 80%;
+    height: 40%;
+    padding: 8px;
+    font-family: 'GangwonEdu_OTFBoldA', sans-serif;
+    font-size: var(--font-medium-large);
+    border: 1px solid var(--grey-light-color);
+    border-radius: 7px;
+}
+
+.login .panel .input_row span {
+    margin-top: 5px;
+    font-size: var(--font-medium-large);
+    color: var(--red-color);
+}
+
+.login .panel .login_btn {
+    margin-top: 1rem;
+    width: 150px;
+    height: 50px;
+    background-color: var(--blue-color);
+    border: none;
+    border-radius: 4rem;
+}
+
+.login .panel .login_btn:hover {
+    background-color: #85c2d6;
 }
