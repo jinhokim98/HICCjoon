@@ -1,9 +1,44 @@
+import subprocess
+
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from datetime import datetime
 
 from django.core.files.storage import FileSystemStorage
 import json
+import time
+import os
+import threading
+import sys
+
+# path management
+# solution_file/{user_id}/{task_number}/ : 사용자가 제출한 솔루션 파일
+# grading_file/{task_number}.py          : 채점용 데이터 파일
+# task_file/{task_file_num}.json         : 문제 파일f
+# log/compile                            : 컴파일 결과 출력/예외 로그
+# log/execute                            : 실행 결과 출력/예외 로그
+
+# reference code
+def test(request):
+    return render(request, 'PSP/test.html')
+
+
+# reference code
+def test_back(request):
+    # fetch는 이렇게 받아야 하는갑다
+    req = json.loads(request.body)
+
+    if request.method == "POST":
+        print(f"title : {req['title']}")
+        print(f"body  : {req['body']}")
+        print(f"userid: {req['userid']}")
+    response = {
+        "score": 10,
+        "date_string": "2023-01-11",
+        "current_time": time.ctime(),
+    }
+
+    return JsonResponse(response)
 
 
 def index(request):
@@ -76,23 +111,137 @@ def task_detail(request, number: int = 1):
     # 역시 Task는 편한 대로 수정하시면 됩니다.
     print(request)
     print(request.method)
+
+    number_str = str(number).zfill(5)
+
     if request.method == "POST":
+        # 1. 파싱 및 데이터, 경로 정리
         data = json.loads(request.body)
-        print(f'language: {data["language"]}')
-        print(f'code: {data["code"]}')
-        print(f'task_no: {number}')
-        print(f'time: {datetime.now()}')  # 시간은 서버 시간 기준
+
+        current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+        extension = ".cpp" if data["language"] == "cpp" else ".py"
+        user_id = "test_user"  # user_name을 로그인 세션으로부터 가져와야 함
+        solution_file_path = f'solution_file/{user_id}/{number_str}/' \
+                         f'{current_time}{extension}'
+        print(solution_file_path)
+
+        # 2. 없는 디렉터리 생성
+        solution_dir = os.path.dirname(solution_file_path)
+        os.makedirs(solution_dir, exist_ok=True)
+
+        # 3. 파일 작성
+        with open(solution_file_path, 'w', encoding='utf-8') as outfile:
+            outfile.write(data["code"])
+
+        # 4. thread로 분리
+        def run_solution(number_str):
+            # 0. path check
+            log_compile_dir = f"log/compile/{user_id}/{number_str}"  # user_id/datetime.extension
+            log_execute_dir = f"log/execute/{user_id}/{number_str}"
+            log_judge_dir = f"log/judge/{user_id}/{number_str}"
+
+            program_path = os.path.abspath(f"temp/program/program")
+
+            os.makedirs(f"temp/program", exist_ok=True)
+            os.makedirs(log_compile_dir, exist_ok=True)
+            os.makedirs(log_execute_dir, exist_ok=True)
+            os.makedirs(log_judge_dir, exist_ok=True)
+
+            score = 0
+            result_summary = ""
+            result_detail = ""
+            args = []
+
+            # =================================
+            # 컴파일
+            # =================================
+            if extension == ".cpp":
+                # 0. setup path environment
+                compiler_path = os.path.abspath("Resource/Compiler/w64devkit")
+                compiler_bin_path = os.path.join(compiler_path, 'bin')
+                os.environ["W64DEVKIT"] = "1.17.0"
+                os.environ["W64DEVKIT_HOME"] = compiler_path
+                os.environ["PATH"] = compiler_bin_path + ';' + os.environ["PATH"]
+
+                # 1. 파일 컴파일
+                if os.path.exists(program_path + ".exe"):
+                    os.remove(program_path + ".exe")
+
+                args = ["g++.exe", "-o", program_path, os.path.abspath(solution_file_path)]
+                print(f'args: {args}')
+
+                compile_stdout = (os.path.join(log_compile_dir, current_time + "_output.txt"))
+                compile_stderr = (os.path.join(log_compile_dir, current_time + "_error.txt"))
+
+                with open(compile_stdout, 'w') as stdout:
+                    with open(compile_stderr, 'w') as stderr:
+                        subprocess.run(args, shell=True, stdout=stdout, stderr=stderr)
+
+                # 1.2 에러 있는지 확인
+
+                args = [program_path]
+
+            elif extension == ".py":
+                # 0. setup path environment
+
+                args = ["python", solution_file_path]
+
+            # =================================
+            # 실행
+            # =================================
+
+            # 3. 실행(프로그램 실행)
+            execute_stdout = os.path.join(log_execute_dir, current_time + "_output.txt")
+            execute_stderr = os.path.join(log_execute_dir, current_time + "_error.txt")
+            execute_stdin = os.path.join("input_file", f"{number_str}.txt")
+
+            with open(execute_stdin, 'r') as stdin:
+                with open(execute_stdout, 'w') as stdout:
+                    with open(execute_stderr, 'w') as stderr:
+                        subprocess.run(args, shell=True, stdin=stdin, stdout=stdout, stderr=stderr)
+
+            # =================================
+            # 채점
+            # =================================
+
+            judge_stdin = execute_stdout
+            judge_stdout = os.path.join(log_judge_dir, current_time + "_output.txt")
+            judge_stderr = os.path.join(log_judge_dir, current_time + "_error.txt")
+            judge_file_path = os.path.join('grading_file', f"{number_str}.py")
+
+            args = ["python", judge_file_path]
+
+            # 2. 테스트 및 채점(프로세스 실행)
+            with open(judge_stdin, 'r') as stdin:
+                with open(judge_stdout, 'w') as stdout:
+                    with open(judge_stderr, 'w') as stderr:
+                        subprocess.run(args, shell=True, stdin=stdin, stdout=stdout, stderr=stderr)
+
+            with open(judge_stdout, 'r') as result_file:
+                score = int(result_file.readline().strip())
+
+            print("final score: " + str(score))
+
+            # 4. DB 저장
+
+        t = threading.Thread(target=run_solution, args=tuple([number_str]))
+        t.start()
+
+    task_file = f'task_file/{number_str}.json'
 
     args = dict()
     args["task_index"] = number
-    return render(request, 'PSP/task_detail.html', args)
 
-    # response = {
-    #     "score": 10,
-    #     "time": "2023-01-11"
-    # }
-    #
-    # return JsonResponse(response)
+    if os.path.exists(task_file):
+        json_data = dict()
+        with open(task_file, 'r', encoding='utf-8') as json_fp:
+            json_data = json.load(json_fp)
+            args["task_title"] = json_data["문제 이름"]
+            args["task_article"] = json_data["문제 내용"]
+            args["example_input"] = json_data["입력 예시"]
+            args["example_output"] = json_data["출력 예시"]
+
+    return render(request, 'PSP/task_detail.html', args)
 
 
 def lobby(request):
@@ -172,7 +321,7 @@ def enroll(request):
 
         task_score = request.POST.get('task_score')
         # task_file_num과 task_name, task_score 및 업로드 사용자 이름(추가 예정으로 보이네요)을 기반으로 DB에 등록해주세요.
-        
+
         context = {
             'success': 'file uploaded successfully.',
             'url': task_file_path,

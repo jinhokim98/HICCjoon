@@ -1,5 +1,5 @@
 const submit_button = document.getElementById("submit");
-const code_editor = document.getElementById("code");
+const code_editor = document.getElementById("editor-code");
 const language_selector = document.getElementById("language");
 
 // 마지막 코드 업데이트 후 스패밍 방지용 flag 하고 싶은데.. 일단은 보류
@@ -28,13 +28,14 @@ var csrf_token = get_cookie('csrftoken');
 
 // ajax code submittance
 function submit_code(e){
+    console.log("clicked submit");
     var http = new XMLHttpRequest();
 
     var url = window.location.href;
     http.open("POST", url, true);
     
     var language = document.getElementById("language").selectedOptions[0].value; 
-    var source_code = document.getElementById("code").innerText
+    var source_code = document.getElementById("editor-code").innerText
     var jsonData = {"language" : language , "code" : source_code}; // 값 자체는 제대로 가져옴
     
     // http.onreadystatechange = function() {
@@ -70,7 +71,7 @@ function refresh_highlight(e){
 
 function confirm_language(e){
     if(confirm("언어를 변경할 경우 코드가 초기화됩니다.\n필요한 경우 백업해주세요.\n\n언어를 변경하시겠습니까?")){
-        document.getElementById("code").innerText = "";
+        document.getElementById("editor-code").innerText = "";
     }
 }
 
