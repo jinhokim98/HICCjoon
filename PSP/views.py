@@ -275,7 +275,7 @@ def lobby(request):
         return redirect('PSP:index')
     if contest_start_time < current_time:
         # print(2)
-        return redirect('PSP:task')
+        return redirect('PSP:task_list')
     contest_start_time = int(time.mktime(contest_start_time.timetuple())) * 1000
     # print(3)
     print(contest_start_time)
