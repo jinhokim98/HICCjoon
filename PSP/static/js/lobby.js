@@ -3,10 +3,10 @@ const remaining_time = document.getElementById('remaining_time');
 function remaining_timer() {
     // views.py 에서 대회 시간 받아 오면 new Date(contest_day)로 치환할 예정
     // contest_day 는 yyyy-mm-dd hh:mm:ss 로 formatting
-    const contest_time = new Date("2023-02-05 00:45:00");
+    console.log(contest_day)
     const now = new Date();
 
-    const diff = contest_time - now;
+    const diff = contest_day - now;
 
     const diff_day = String(Math.floor(diff / (1000*60*60*24)));
     const diff_hour =String(Math.floor((diff / (1000*60*60)) % 24)).padStart(2,"0");

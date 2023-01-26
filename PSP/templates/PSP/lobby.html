@@ -37,7 +37,7 @@
 
 {% block js %}
     <script>
-        const contest_day = {{ contest_time }}
+        const contest_day = new Date({{ time }});
     </script>
     <script src="{% static 'js/lobby.js' %}"></script>
 {% endblock %}
