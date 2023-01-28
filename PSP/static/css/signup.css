@@ -1,40 +1,3 @@
-@font-face {
-    font-family: 'GangwonEdu_OTFBoldA';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEdu_OTFBoldA.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
-:root {
-    /* color */
-    --white-color: #fff;
-    --black-color: #140a00;
-    --blue-color: #a2d2e2;
-    --blue-light-color: #EBF5FB;
-    --purple-light-color: #FBF8FD;
-    --grey-light-color:#C2C3CF;
-    --red-color: #ff0000;
-
-
-    /* size */
-    --padding-left: 12px;
-
-    /* font size */
-    --logo-size: 35px;
-    --font-extra: 24px;
-    --font-large: 18px;
-    --font-medium-large: 16px;
-    --font-medium: 14px;
-    --font-small: 12px;
-    --font-micro: 10px;
-}
-
-* {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
-
 body {
     font-family: 'GangwonEdu_OTFBoldA', sans-serif;
     height: 100vh;
@@ -48,13 +11,13 @@ body {
 
 .leftbar {
     grid-area: leftbar;
-    background-color: var(--blue-color);
+    background-color: var(--main-blue-color);
 }
 
 .leftbar .title {
     display: flex;
     align-items: center;
-    margin-left: 3rem;
+    margin-left: var(--section-margin);
     height: 25%;
 }
 
@@ -73,11 +36,11 @@ body {
     display: flex;
     flex-direction: column;
     height: 100%;
-    margin-left: 3rem;
+    margin-left: var(--section-margin);
 }
 
 .leftbar .desc .hicc_hiccjoon{
-    font-size: var(--font-extra);
+    font-size: var(--title-size);
     color: var(--black-color);
 }
 
@@ -100,22 +63,22 @@ body {
 }
 
 .go_signin .signin_btn {
-    padding: 8px 12px;
+    padding: var(--padding-default);
     border: 1px solid;
-    border-color: var(--grey-light-color);
+    border-color: var(--border-color);
     border-radius: 10%;
     background-color: transparent;
 }
 
 .go_signin .signin_btn:hover {
-    background-color: var(--blue-color);
+    background-color: var(--main-blue-color);
 }
 
 .signup {
     grid-area: signup;
     display: flex;
     flex-direction: column;
-    margin-left: 3rem;
+    margin-left: var(--section-margin);
 }
 
 .signup .title {
@@ -125,12 +88,12 @@ body {
 }
 
 .signup .title h1 {
-    padding: 4px 0;
+    padding: var(--padding-default);
     font-size: 28px;
 }
 
 .signup .title span {
-    padding: 4px 0;
+    padding: var(--padding-default);
     font-size: var(--font-medium);
 }
 
@@ -138,6 +101,7 @@ body {
     display: flex;
     flex-direction: column;
     height: 75%;
+    padding: var(--padding-default);
     padding-top: 1rem;
 }
 
@@ -155,27 +119,27 @@ body {
 .signup .panel .input_row input {
     width: 80%;
     height: 40%;
-    padding: 8px;
-    font-family: 'GangwonEdu_OTFBoldA', sans-serif;
-    font-size: var(--font-medium-large);
-    border: 1px solid var(--grey-light-color);
+    padding: var(--padding-default);
+    font-size: var(--input-size);
+    border: 1px solid var(--border-color);
     border-radius: 7px;
 }
 
 .signup .panel .input_row span {
     margin-top: 5px;
-    font-size: var(--font-medium-large);
-    color: var(--red-color);
+    font-size: var(--input-size);
+    color: var(--error-message-color);
 }
 
 .signup #signup_btn {
     width: 150px;
     height: 40px;
-    background-color: var(--blue-color);
+    background-color: var(--main-blue-color);
     border: none;
+    margin: var(--padding-default);
     border-radius: 4rem;
 }
 
 .signup #signup_btn:hover {
-    background-color: #85c2d6;
+    background-color: var(--blue-accent-color);
 }
