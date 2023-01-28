@@ -23,7 +23,8 @@ import sys
 # log/execute                            : 실행 결과 출력/예외 로그
 
 contest_start_time = datetime(2023, 1, 26, 15, 30, 00)
-contest_end_time = datetime(2023, 1, 26, 16, 35, 00)
+contest_end_time = datetime(2025, 1, 26, 16, 35, 00)
+# contest_end_time = datetime(2023, 1, 26, 16, 35, 00)
 
 
 # reference code
@@ -162,9 +163,13 @@ def task_detail(request, number: int = 1):
         # 4. thread로 분리
         def run_solution(number_str):
             # 0. path check
-            log_compile_dir = f"log/compile/{user_id}/{number_str}"  # user_id/datetime.extension
-            log_execute_dir = f"log/execute/{user_id}/{number_str}"
-            log_judge_dir = f"log/judge/{user_id}/{number_str}"
+            # log_compile_dir = f"log/compile/{user_id}/{number_str}"  # user_id/datetime.extension
+            # log_execute_dir = f"log/execute/{user_id}/{number_str}"
+            # log_judge_dir = f"log/judge/{user_id}/{number_str}"
+            log_base_dir = f"log/{user_id}/{number_str}/{current_time}"
+            log_compile_dir = os.path.join(log_base_dir, "compile")  # user_id/datetime.extension
+            log_execute_dir = os.path.join(log_base_dir, "execute")
+            log_judge_dir = os.path.join(log_base_dir, "judge")
 
             program_path = os.path.abspath(f"temp/program/program")
 
@@ -196,8 +201,8 @@ def task_detail(request, number: int = 1):
                 args = ["g++.exe", "-o", program_path, os.path.abspath(solution_file_path)]
                 print(f'args: {args}')
 
-                compile_stdout = (os.path.join(log_compile_dir, current_time + "_output.txt"))
-                compile_stderr = (os.path.join(log_compile_dir, current_time + "_error.txt"))
+                compile_stdout = (os.path.join(log_compile_dir, "stdout.txt"))
+                compile_stderr = (os.path.join(log_compile_dir, "stderr.txt"))
 
                 with open(compile_stdout, 'w') as stdout:
                     with open(compile_stderr, 'w') as stderr:
@@ -217,8 +222,8 @@ def task_detail(request, number: int = 1):
             # =================================
 
             # 3. 실행(프로그램 실행)
-            execute_stdout = os.path.join(log_execute_dir, current_time + "_output.txt")
-            execute_stderr = os.path.join(log_execute_dir, current_time + "_error.txt")
+            execute_stdout = os.path.join(log_execute_dir, "stdout.txt")
+            execute_stderr = os.path.join(log_execute_dir, "stderr.txt")
             execute_stdin = os.path.join("input_file", f"{number_str}.txt")
 
             with open(execute_stdin, 'r') as stdin:
@@ -231,8 +236,8 @@ def task_detail(request, number: int = 1):
             # =================================
 
             judge_stdin = execute_stdout
-            judge_stdout = os.path.join(log_judge_dir, current_time + "_output.txt")
-            judge_stderr = os.path.join(log_judge_dir, current_time + "_error.txt")
+            judge_stdout = os.path.join(log_judge_dir, "stdout.txt")
+            judge_stderr = os.path.join(log_judge_dir, "stderr.txt")
             judge_file_path = os.path.join('grading_file', f"{number_str}.py")
 
             args = ["python", judge_file_path]
