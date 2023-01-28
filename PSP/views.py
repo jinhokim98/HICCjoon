@@ -22,8 +22,8 @@ import sys
 # log/compile                            : 컴파일 결과 출력/예외 로그
 # log/execute                            : 실행 결과 출력/예외 로그
 
-contest_start_time = datetime(2023, 1, 26, 15, 30, 00)
-contest_end_time = datetime(2025, 1, 26, 16, 35, 00)
+contest_start_time = datetime(2023, 1, 29, 00, 12, 00)
+contest_end_time = datetime(2023, 1, 29, 00, 17, 00)
 # contest_end_time = datetime(2023, 1, 26, 16, 35, 00)
 
 
@@ -119,15 +119,21 @@ def task_list(request):
     # 현재 Task에 존재하는 레코드를 전부 가져와서 tasks라는 변수에 저장해주세요.
     # 일단 임시로 Task라는 클래스를 만들어두었는데, DB에 맞게 편하게 수정하면 됩니다.
     # 인출까지 완료했다면 그 뒤는 제가 인계받아 작업하겠습니다. 
-    args = dict()
+    context = dict()
+    context["is_in_process"] = False
+
+    # 대회 중 일때만 페이지 접근 가능
+    if contest_start_time < datetime.now() < contest_end_time:
+        context.update({"is_in_process": True})
+
     task_list = [
         Task(1, "test_problem 1", "me"),
         Task(2, "test_problem 2", "you"),
         Task(3, "test_problem 3", "he"),
     ]
-    args["task_list"] = task_list
-    args["contest_end_time"] = int(time.mktime(contest_end_time.timetuple())) * 1000
-    return render(request, 'PSP/task_list.html', args)
+    context["task_list"] = task_list
+    context["contest_end_time"] = int(time.mktime(contest_end_time.timetuple())) * 1000
+    return render(request, 'PSP/task_list.html', context)
 
 
 def task_detail(request, number: int = 1):
@@ -260,20 +266,25 @@ def task_detail(request, number: int = 1):
 
     task_file = f'task_file/{number_str}.json'
 
-    args = dict()
-    args["task_index"] = number
-    args["contest_end_time"] = int(time.mktime(contest_end_time.timetuple())) * 1000
+    context = dict()
+    context["task_index"] = number
+    context["contest_end_time"] = int(time.mktime(contest_end_time.timetuple())) * 1000
+    context["is_in_process"] = False
+
+    # 대회 중 일때만 페이지 접근 가능
+    if contest_start_time < datetime.now() < contest_end_time:
+        context.update({"is_in_process": True})
 
     if os.path.exists(task_file):
         json_data = dict()
         with open(task_file, 'r', encoding='utf-8') as json_fp:
             json_data = json.load(json_fp)
-            args["task_title"] = json_data["문제 이름"]
-            args["task_article"] = json_data["문제 내용"]
-            args["example_input"] = json_data["입력 예시"]
-            args["example_output"] = json_data["출력 예시"]
+            context["task_title"] = json_data["문제 이름"]
+            context["task_article"] = json_data["문제 내용"]
+            context["example_input"] = json_data["입력 예시"]
+            context["example_output"] = json_data["출력 예시"]
 
-    return render(request, 'PSP/task_detail.html', args)
+    return render(request, 'PSP/task_detail.html', context)
 
 
 def lobby(request):
