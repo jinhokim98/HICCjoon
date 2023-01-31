@@ -1,9 +1,10 @@
 import subprocess
 
+from django.db import transaction
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from datetime import datetime
-from .models import CustomUser
+from .models import CustomUser, TimestampedModel, Task
 from django.db.utils import IntegrityError
 
 from django.contrib.auth import login, logout
@@ -105,11 +106,11 @@ def signup(request):
     return render(request, 'PSP/signup.html', context)
 
 
-class Task:
-    def __init__(self, index, name, author):
-        self.index = index
-        self.name = name
-        self.author = author
+# class Task:
+#     def __init__(self, index, name, author):
+#         self.index = index
+#         self.name = name
+#         self.author = author
 
 
 def task_list(request):
@@ -120,12 +121,12 @@ def task_list(request):
     # 일단 임시로 Task라는 클래스를 만들어두었는데, DB에 맞게 편하게 수정하면 됩니다.
     # 인출까지 완료했다면 그 뒤는 제가 인계받아 작업하겠습니다. 
     args = dict()
-    task_list = [
-        Task(1, "test_problem 1", "me"),
-        Task(2, "test_problem 2", "you"),
-        Task(3, "test_problem 3", "he"),
-    ]
-    args["task_list"] = task_list
+    # task_list = [
+    #     Task(tid=1, tname="test_problem 1", mid="GuardiandemoN", max_score=100),
+    #     Task(tid=2, tname="test_problem 2", mid="GuardiandemoN", max_score=100),
+    #     Task(tid=3, tname="test_problem 3", mid="GuardiandemoN", max_score=100),
+    # ]
+    args["task_list"] = list(Task.objects.all())
     args["contest_end_time"] = int(time.mktime(contest_end_time.timetuple())) * 1000
     return render(request, 'PSP/task_list.html', args)
 
@@ -328,7 +329,6 @@ def end(request):
 
 
 def enroll(request):
-
     # grading_file과 task_file을 저장하는 곳
     # grading_file은 py파일이 저장되며, task_file은 json으로 저장된다.
     # 여기서는 문제 이름이 중복됐는지만 확인해주면 될 것 같다.
@@ -357,6 +357,18 @@ def enroll(request):
         task_score = request.POST.get('task_score')
         # task_file_num과 task_name, task_score 및 업로드 사용자 이름(추가 예정으로 보이네요)을 기반으로 DB에 등록해주세요.
 
+        # DB transaction
+        creation_user = CustomUser.objects.get(nickname=request.user.nickname)
+
+        new_index = len(Task.objects.all()) + 1
+        Task.objects.create(
+            tid=new_index,
+            tname=request.POST.get('task_name'),
+            max_score=task_score,
+            mid=creation_user,
+        )
+        # end of DB transaction
+
         context = {
             'success': 'file uploaded successfully.',
             'url': task_file_path,
@@ -382,3 +394,16 @@ def task_timecheck(request):
             response.update({'contest': "end"})
 
         return JsonResponse(response)
+
+
+def query_data(request):
+    with transaction.atomic():
+        print("==== CustomUser")
+        for item in CustomUser.objects.all():
+            print(item)
+        print("==== Task")
+        Task.objects.all().delete()
+        for item in Task.objects.all():
+            print(item)
+
+    return render(request, 'PSP/index.html')

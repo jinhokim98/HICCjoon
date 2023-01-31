@@ -32,4 +32,5 @@ urlpatterns = [
     path('test_back/', views.test_back, name='test_back'),
     path('user_logout/', views.user_logout, name='user_logout'),
     path('task_timecheck/', views.task_timecheck, name='task_timecheck'),
+    path('query/', views.query_data, name='query_data'),
 ]

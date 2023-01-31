@@ -15,8 +15,8 @@
         </section>
         {% for task in task_list %}
         <a class="main-section" href="task/{{ task.index }}">
-            <span id="task-title">{{ task.index }}. {{ task.name }}</span>
-            <span id="task-author">{{ task.author }}</span>
+            <span id="task-title">{{ task.tid }}. {{ task.tname }}</span>
+<!--            <span id="task-author">{{ task.author }}</span>-->
         </a>
         {% endfor %}
         <button>

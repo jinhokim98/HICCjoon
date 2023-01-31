@@ -6,6 +6,7 @@ from .managers import CustomUserManager
 
 
 class TimestampedModel(models.Model):
+    objects = models.Manager()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -28,6 +29,7 @@ class CustomUser(AbstractUser, PermissionsMixin, TimestampedModel):
 
 
 class Task(models.Model):
+    objects = models.Manager()
     tid = models.CharField(max_length=20, primary_key=True) #task_id
     tname = models.TextField()
     max_score = models.IntegerField()
@@ -38,6 +40,7 @@ class Task(models.Model):
 
 
 class Solution(models.Model):
+    objects = models.Manager()
     sid = models.CharField(max_length=20, primary_key=True) #solution_id
     mname = models.ForeignKey(CustomUser, on_delete=models.CASCADE) #user_name
     tid = models.ForeignKey(Task, on_delete=models.CASCADE) #prob_index
