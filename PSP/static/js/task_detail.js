@@ -85,12 +85,11 @@ function remaining_timer() {
     const now = new Date();
     const diff = contest_end_time - now;
 
-    const diff_day = String(Math.floor(diff / (1000*60*60*24)));
     const diff_hour =String(Math.floor((diff / (1000*60*60)) % 24)).padStart(2,"0");
     const diff_min = String(Math.floor((diff / (1000*60)) % 60)).padStart(2,"0");
     const diff_sec = String(Math.floor(diff / 1000 % 60)).padStart(2,"0");
 
-    remaining_time.textContent = `${diff_day}일 ${diff_hour}시간 ${diff_min}분 ${diff_sec}초 남았습니다.`;
+    remaining_time.textContent = `${diff_hour}시간 ${diff_min}분 ${diff_sec}초 남았습니다.`;
 }
 
 function start_timer() {

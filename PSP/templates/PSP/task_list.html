@@ -16,8 +16,7 @@
             <span class="title">HICCjoon</span>
         </div>
         <div class="member">
-            <span class="login_user">name님 환영합니다.</span>
-            <div class="point">현재 점수는 : <span class="current_point">100점</span></div>
+            <span class="login_user">{{ user.nickname }}님 환영합니다.</span>
         </div>
     </header>
 
@@ -27,7 +26,7 @@
         <div class="time">
             <i class="fa-sharp fa-solid fa-grip-lines-vertical"></i>
             <p>남은 시간 : </p>
-            <span id="remaining_time">1시간</span>
+            <span id="remaining_time"></span>
         </div>
         <table class="table table-hover">
             <thead>

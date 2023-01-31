@@ -8,7 +8,7 @@ function remaining_timer() {
     const diff_min = String(Math.floor((diff / (1000*60)) % 60)).padStart(2,"0");
     const diff_sec = String(Math.floor(diff / 1000 % 60)).padStart(2,"0");
 
-    remaining_time.textContent = `남은 시간 : ${diff_hour}시간 ${diff_min}분 ${diff_sec}초`;
+    remaining_time.textContent = `${diff_hour}시간 ${diff_min}분 ${diff_sec}초`;
 }
 
 function start_timer() {

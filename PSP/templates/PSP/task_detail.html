@@ -9,48 +9,70 @@
 
 {% block content %}
 {% if user.is_authenticated and is_in_process %}
-    <article class="main-section-container">
-        <section class="main-section">
-            <div id="remaining_time"></div>
-        </section>
-        <section class="main-section">
-            <div id="task-title">문제 {{ task_index }} {{ task_title }}</div>
-            <hr />
-            <div id="task-description">{{ task_article }}</div>
-        </section>
-        <section class="main-section">
-            <div id="task-title">예제 입력</div>
-            <hr />
-            <div id="task-description">{{ example_input }}</div>
-        </section>
-        <section class="main-section">
-            <div id="task-title">예제 출력</div>
-            <hr />
-            <div id="task-description">{{ example_output }}</div>
-        </section>
-        <section class="main-section">
-            <div class="main-section-header">
-                <span id="solution-title">Solution</span>
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-code"></i>
+            <span class="title">HICCjoon</span>
+        </div>
+        <span id="remaining_time">남은 시간</span>
+        <div class="member">
+            <span class="login_user">{{ user.nickname }}님 환영합니다.</span>
+            <div class="point">점수는 : <span class="current_point">100점</span></div>
+        </div>
+    </header>
 
-                    <!-- language: python-->
+    <main>
+        <!-- Title -->
+        <section class="title">
+            <h1>{{ task_index }}. {{ task_title }}</h1>
+        </section>
+
+        <!-- Desc -->
+        <section class="contents">
+            <div class="title">
+                <h2>문제</h2>
+            </div>
+            <div class="desc">{{ task_article }}</div>
+        </section>
+        <div class="example">
+            <section class="contents">
+                <div class="title">
+                    <h2>예제 입력</h2>
+                </div>
+                <pre class="desc">{{ example_input }}</pre>
+            </section>
+            <section class="contents">
+                <div class="title">
+                    <h2>예제 출력</h2>
+                </div>
+                <pre class="desc">{{ example_output }}</pre>
+            </section>
+        </div>
+        <section class="contents">
+            <div class="title code_submit">
+                <h2>제출</h2>
                 <div id="language-container">
-                    <span>language</span>
+                    <label for="language">language</label>
                     <select id="language" name="language">
                         <option value="cpp">C/C++</option>
                         <option value="python">Python</option>
                     </select>
                 </div>
             </div>
+            <div class="desc">
+                <pre id="editor-pre">
+                    <code contenteditable="true" name="code" id="editor-code">int main(){}</code>
+                </pre>
+            </div>
+        </section>
+    </main>
 
-            <hr />
-            
-            <pre id="editor-pre">
-                <code contenteditable="true" name="code" id="editor-code">int main(){}</code>
-            </pre>
-
-        </section>            
-        <button id="submit">제출!</button>
-    </article>
+    <!-- buttons -->
+    <footer class="buttons">
+        <button type="button" class="go_menu" onclick="location.href={% url 'PSP:task_list' %}">메뉴</button>
+        <button type="submit" id="submit">제출</button>
+    </footer>
 {% else %}
     <div class="login_error">
         비정상적인 접근입니다. 정상적인 경로로 이용해주시기 바랍니다.
