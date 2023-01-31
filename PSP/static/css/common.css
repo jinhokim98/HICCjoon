@@ -11,12 +11,15 @@
     --black-color: #140a00;
     --main-blue-color: #a2d2e2;
     --blue-accent-color: #85c2d6;
+    --club-representing-color: #7FA9FF;
     --border-color:#C2C3CF;
     --error-message-color: #ff0000;
+    --background-color: #F7F6F9;
 
     /* padding, margin */
     --padding-left: 12px;
     --padding-default: 8px 12px;
+    --padding-more: 15px 30px;
     --section-margin: 3rem;
 
     /* font size */

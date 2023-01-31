@@ -1,60 +1,118 @@
+:root {
+    --rule-title-color: #F5F9F9;
+    --main-color: #E9EFF4;
+}
+
+body {
+    height: 100vh;
+}
+
 header {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    width: 100%;
-    height: 100px;
-    font-size: 25px;
+    height: 15%;
 }
 
-h1 {
-    text-align: center;
-}
-
-section {
-    position: relative;
-    width: 100%;
-    height: 550px;
-}
-
-#contest_rules {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 800px;
-    height: 500px;
-    border: 1px solid #c6c6c6;
-    border-radius: 6px;
-    background-color: #fff;
-    box-shadow: 0 5px 8px 0 rgb(68 68 68 / 4%);
-}
-
-#contest_rules h2 {
+header .logo {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 35px;
+    padding: var(--padding-default);
+    font-size: var(--logo-size);
 }
 
-#contest_rules ol {
+header .logo *{
+    padding: var(--padding-default);
+    color: var(--club-representing-color);
+}
+
+header .logo .title {
+    padding-left: 0;
+}
+
+header .member {
+    display: flex;
+    align-items: center;
+}
+
+header .member .login_user {
+    font-size: var(--font-medium);
+    margin: var(--padding-default);
+    padding: var(--padding-default);
+}
+
+header .member button {
+    margin: var(--padding-default);
+    padding: var(--padding-default);
+    margin-right: 26px;
+    height: 30px;
+    background-color: transparent;
+    border: none;
+    border-radius: 4px;
+}
+
+header .member button:hover {
+    cursor: pointer;
+    background-color: var(--main-blue-color);
+}
+
+body .main_title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--padding-default);
+    background-color: var(--rule-title-color);
+    border-top: 1px solid var(--border-color);
+    height: 50px;
+}
+
+body .main_title .title {
+    font-size: var(--font-large);
+}
+
+body .main_title #remaining_time {
+    font-size: var(--font-large);
+    color: var(--error-message-color);
+}
+
+.contest_rules {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-size: 18px;
-}
-
-footer {
-    position: relative;
     width: 100%;
-    height: 100px;
+    padding: var(--padding-more);
+    background-color: var(--main-color);
 }
 
-#remaining_time_place {
+.contest_rules .rule {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 20px;
-    color: red;
+    flex-direction: column;
+    margin: 1rem;
+    background-color: var(--white-color);
+    padding: var(--padding-default);
+}
+
+.contest_rules .rule .rule_title {
+    margin-bottom: 1rem;
+    font-size: var(--font-large);
+}
+
+.contest_rules .rule .rule_desc {
+    margin-bottom: 1.5rem;
+    font-size: var(--font-medium);
+}
+
+.contest_rules .rule .rule_list {
+    padding-left: 18px;
+    list-style-type: upper-roman;
+}
+
+.contest_rules .rule .rule_list li {
+    padding: var(--padding-default);
+    padding-left: 0;
+    font-size: var(--font-medium);
+}
+
+.contest_rules .rule .rule_list .specific {
+    display: inline-block;
+    margin: 5px 0 12px;
+    font-size: var(--font-medium);
 }
