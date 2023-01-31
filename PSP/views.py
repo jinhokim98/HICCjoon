@@ -126,10 +126,9 @@ def task_list(request):
     # 대회 중 일때만 페이지 접근 가능
     if contest_start_time < datetime.now() < contest_end_time:
         context.update({"is_in_process": True})
-    args = dict()
-    args["task_list"] = list(Task.objects.all())
-    args["contest_end_time"] = int(time.mktime(contest_end_time.timetuple())) * 1000
-    return render(request, 'PSP/task_list.html', args)
+    context["task_list"] = list(Task.objects.all())
+    context["contest_end_time"] = int(time.mktime(contest_end_time.timetuple())) * 1000
+    return render(request, 'PSP/task_list.html', context)
 
 
 def task_detail(request, number: int = 1):

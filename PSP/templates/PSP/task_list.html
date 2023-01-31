@@ -14,7 +14,7 @@
             <div id="remaining_time"></div>
         </section>
         {% for task in task_list %}
-        <a class="main-section" href="task/{{ task.index }}">
+        <a class="main-section" href="task/{{ task.tid }}">
             <span id="task-title">{{ task.tid }}. {{ task.tname }}</span>
 <!--            <span id="task-author">{{ task.author }}</span>-->
         </a>
