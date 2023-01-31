@@ -22,8 +22,9 @@ import sys
 # log/compile                            : 컴파일 결과 출력/예외 로그
 # log/execute                            : 실행 결과 출력/예외 로그
 
-contest_start_time = datetime(2023, 1, 29, 00, 12, 00)
-contest_end_time = datetime(2023, 1, 29, 00, 17, 00)
+
+contest_start_time = datetime(2023, 1, 12, 00, 12, 00)
+contest_end_time = datetime(2023, 2, 13, 00, 17, 00)
 # contest_end_time = datetime(2023, 1, 26, 16, 35, 00)
 
 

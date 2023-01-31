@@ -4,25 +4,56 @@
 {% block css %}
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <link rel="stylesheet" href="{% static 'css/task.css' %}">
-    <!-- 아래 부분은 파일 분리 예정 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 {% endblock %}
 
 {% block content %}
 {% if user.is_authenticated and is_in_process %}
-    <article class="main-section-container">
-        <section class="main-section">
-            <div id="remaining_time"></div>
-        </section>
-        {% for task in task_list %}
-        <a class="main-section" href="task/{{ task.tid }}">
-            <span id="task-title">{{ task.tid }}. {{ task.tname }}</span>
-<!--            <span id="task-author">{{ task.author }}</span>-->
-        </a>
-        {% endfor %}
-        <button>
-            제출 완료
-        </button>
-    </article>
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-code"></i>
+            <span class="title">HICCjoon</span>
+        </div>
+        <div class="member">
+            <span class="login_user">{{ user.nickname }}님 환영합니다.</span>
+        </div>
+    </header>
+
+     <!-- Task list -->
+    <section>
+        <div class="title">2023 HICC 겨울방학 프로그래밍 대회</div>
+        <div class="time">
+            <i class="fa-sharp fa-solid fa-grip-lines-vertical"></i>
+            <p>남은 시간 : </p>
+            <span id="remaining_time"></span>
+        </div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">문제 번호</th>
+                    <th scope="col">문제 제목</th>
+                    <th scope="col">문제 배점</th>
+                    <th scope="col">문제 저자</th>
+                    <th scope="col">제출 여부</th>
+                    <th scope="col">본인의 점수</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in task_list %}
+                <tr>
+                    <td>{{ task.index| safe }}</td>
+                    <td><a href="task/{{ task.index }}">{{ task.name| safe }}</a></td>
+                    <td>{{ task.point| safe }}</td>
+                    <td>{{ task.author| safe }}</td>
+                    <td>{{ task.is_submit| safe }}</td>
+                    <td>{{ task.score| safe }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+    <button type="submit" class="submit_btn">제출완료</button>
 {% else %}
     <div class="login_error">
         비정상적인 접근입니다. 정상적인 방법으로 이용해주시기 바랍니다.

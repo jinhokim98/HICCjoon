@@ -1,116 +1,216 @@
-*{
-    margin: 0;
-    padding: 0;
-
-    font-size: 12px;
-
-    --task-title-size: 24px;
-    --code-font-size: 12px;
-
-    --main-theme-foreground: black;
-    --main-theme-background: lightgray;
-    --main-theme-code: white;
+body {
+    height: 100vh;
 }
 
-body{
-    background-color: darkgray;
-}
-
-.main-section-container{
-    margin: auto;
-    width: 90vw;
-}
-
-.main-section{
+header {
     display: flex;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    height: 15%;
+    border-bottom: 1px solid var(--border-color);
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+    padding: var(--padding-default);
+    font-size: var(--logo-size);
+}
+
+header .logo *{
+    padding: var(--padding-default);
+    color: var(--club-representing-color);
+}
+
+header .logo .title {
+    padding-left: 0;
+}
+
+header .member {
+    display: flex;
+    align-items: center;
+}
+
+header .member .login_user {
+    font-size: var(--font-large);
+    margin: var(--padding-default);
+    padding: var(--padding-default);
+}
+
+header .member .point {
+    font-size: var(--font-large);
+    margin: var(--padding-default);
+    padding: var(--padding-default);
+}
+
+header .member .point .current_point {
+    color: var(--error-message-color);
+}
+
+header #remaining_time {
+    color: var(--error-message-color);
+    font-size: var(--font-large);
+}
+
+section {
+    margin: 30px 30px;
+    display: flex;
     flex-direction: column;
-    align-items: baseline;
-    justify-content: space-between;
-
-    margin: 10px auto 10px auto;
-    padding: 20px;
-
-    border: 1px solid var(--main-theme-foreground);
-    border-radius: 5px;
-
-    background-color: var(--main-theme-background);
 }
 
-.main-section-header{
+section .title {
+    margin-top: 1rem;
+    font-size: var(--title-size);
+}
+
+section .time {
     display: flex;
-    width: 100%;
-    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
 }
 
-article div{
-    margin: 2px;
+section .time i {
+    font-size: 30px;
+    color: var(--error-message-color);
 }
 
-a{
-    color: var(--main-theme-foreground);
+section .time p {
+    padding: var(--padding-left);
+    margin: 0;
+    color: var(--error-message-color);
+    font-size: var(--font-large);
+}
 
+section .time #remaining_time {
+    font-size: var(--font-large);
+    color: var(--error-message-color);
+}
+
+section table {
+    border: 1px solid var(--border-color);
+}
+
+section table thead tr th {
+    text-align: start;
+}
+
+section table tbody tr td a {
     text-decoration: none;
 }
 
-span{
-    display: flex;
-}
-
-button{
-    display: flex;
-    align-items: center;
-
-    padding: 10px;
-    height: 50px;
-
-    margin-left: auto;
-
-    border: 1px solid var(--main-theme-foreground);
-    border-radius: 5px;
-}
-
-#task-title, #solution-title{
-    font-size: var(--task-title-size);
-    font-weight: bold;
-} 
-
-#task-author{
+.submit_btn {
+    margin: 0 24px;
+    padding: var(--padding-default);
     float: right;
+    border: none;
+    border-radius: 4px;
+    background-color: transparent;
+    font-size: var(--font-large);
+    font-family: 'GangwonEdu_OTFBoldA', sans-serif;
 }
 
-#language-container{
-    display: flex;
-    align-items: flex-end;
+.submit_btn:hover {
+    background-color: var(--main-blue-color);
 }
 
-#language-container span{
-    margin-right: 10px;
+main > .title {
+    margin-top: 3rem;
+    font-size: var(--font-large);
 }
 
-hr{
+.contents {
     display: flex;
     flex-direction: column;
-    width: 98%;
-    margin: 10px auto 10px auto;
-    border-bottom: 0 0 1px 0 solid var(--main-theme-foreground);
 }
 
-#editor-pre{
+.contents .title {
+    margin: 10px 0 25px 0;
+    border-bottom: 1px dotted var(--border-color);
+}
+
+.contents .title h2 {
+    border-bottom: 2px solid var(--club-representing-color);
+    padding-bottom: 5px;
+    width: fit-content;
+    font-size: var(--title-size);
+}
+
+.contents .desc {
+    font-size: var(--font-large);
+}
+
+main > .example {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.example .contents {
+    width: 50%;
+}
+
+.example .contents .desc {
+    border: 1px solid var(--border-color);
+    height: 200px;
+    overflow-y: auto;
+}
+
+.contents .code_submit {
+    display: flex;
+    justify-content: space-between;
+}
+
+.contents .code_submit #language-container {
+    display: flex;
+    align-items: center;
+}
+
+.contents .code_submit #language-container *{
+    margin: var(--padding-default);
+}
+
+.contents .code_submit #language-container #language {
+    font-size: var(--font-medium);
+    padding: 5px;
+    font-family: sans-serif;
+}
+
+#editor-pre {
     display: flex;
     flex-grow: 1;
-
+    border: 1px solid var(--border-color);
     height: 50vh;
     width: 100%;
-    padding: 5px;
-    font-size: var(--code-font-size);
-    border: 1px solid var(--main-theme-foreground);
-    border-radius: 3px;
-    background-color: var(--main-theme-code);
+    font-size: var(--font-medium);
     overflow: scroll;
 }
 
-#editor-code{
+#editor-code {
+    font-family: sans-serif;
     width: 100%;
     outline: 0;
+}
+
+#editor-code * {
+    font-family: sans-serif;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-around;
+    margin: var(--padding-default);
+    height: 10%;
+}
+
+.buttons button {
+    width: 70px;
+    height: 30px;
+    border: none;
+    border-radius: 4px;
+    background-color: transparent;
+    font-size: var(--font-large);
+}
+
+.buttons button:hover {
+    cursor: pointer;
+    background-color: var(--main-blue-color);
 }
