@@ -22,8 +22,8 @@ import sys
 # log/compile                            : 컴파일 결과 출력/예외 로그
 # log/execute                            : 실행 결과 출력/예외 로그
 
-contest_start_time = datetime(2023, 1, 29, 00, 12, 00)
-contest_end_time = datetime(2023, 1, 29, 00, 17, 00)
+contest_start_time = datetime(2023, 2, 12, 00, 12, 00)
+contest_end_time = datetime(2023, 2, 13, 00, 17, 00)
 # contest_end_time = datetime(2023, 1, 26, 16, 35, 00)
 
 
@@ -312,6 +312,7 @@ def lobby(request):
 
 def monitoring(request):
     context = {}
+    context = {'time': int(time.mktime(contest_end_time.timetuple())) * 1000}
 
     # 추가로 페이지 하단에 대회 종료까지 남은 시간을 보여주고 있다.
     # 대회 종료시간을 DB에서 가져오려 했지만 contest 테이블이 사라졌기 때문에 여기서 대회 종료 시간을 넘겨주었으면 함
