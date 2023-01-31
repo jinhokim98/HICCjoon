@@ -1,4 +1,4 @@
-*{
+/**{
     margin: 0;
     padding: 0;
 
@@ -10,7 +10,8 @@
     --main-theme-foreground: black;
     --main-theme-background: lightgray;
     --main-theme-code: white;
-}
+}*/
+/*
 
 body{
     background-color: darkgray;
@@ -113,4 +114,112 @@ hr{
 #editor-code{
     width: 100%;
     outline: 0;
+}*/
+body {
+    height: 100vh;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 15%;
+    border-bottom: 1px solid var(--border-color);
+}
+
+header .logo {
+    display: flex;
+    padding: var(--padding-default);
+    font-size: var(--logo-size);
+}
+
+header .logo *{
+    padding: var(--padding-default);
+    color: var(--club-representing-color);
+}
+
+header .logo .title {
+    padding-left: 0;
+}
+
+header .member {
+    display: flex;
+    align-items: center;
+}
+
+header .member .login_user {
+    font-size: var(--font-large);
+    margin: var(--padding-default);
+    padding: var(--padding-default);
+}
+
+header .member .point {
+    font-size: var(--font-large);
+    margin: var(--padding-default);
+    padding: var(--padding-default);
+}
+
+header .member .point .current_point {
+    color: var(--error-message-color);
+}
+
+section {
+    margin: 20px 24px;
+    display: flex;
+    flex-direction: column;
+}
+
+section .title {
+    margin-top: 1rem;
+    font-size: var(--title-size);
+}
+
+section .time {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+section .time i {
+    font-size: 30px;
+    color: var(--error-message-color);
+}
+
+section .time p {
+    padding: var(--padding-left);
+    margin: 0;
+    color: var(--error-message-color);
+    font-size: var(--font-large);
+}
+
+section .time #remaining_time {
+    font-size: var(--font-large);
+    color: var(--error-message-color);
+}
+
+section table {
+    border: 1px solid var(--border-color);
+}
+
+section table thead tr th {
+    text-align: start;
+}
+
+section table tbody tr td a {
+    text-decoration: none;
+}
+
+.submit_btn {
+    margin: 0 24px;
+    padding: var(--padding-default);
+    float: right;
+    border: none;
+    border-radius: 4px;
+    background-color: transparent;
+    font-size: var(--font-large);
+    font-family: 'GangwonEdu_OTFBoldA', sans-serif;
+}
+
+.submit_btn:hover {
+    background-color: var(--main-blue-color);
 }
