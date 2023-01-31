@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-{% if user.is_authenticated %}
+{% if user.is_authenticated and is_in_process %}
     <article class="main-section-container">
         <section class="main-section">
             <div id="remaining_time"></div>
@@ -53,7 +53,7 @@
     </article>
 {% else %}
     <div class="login_error">
-        비정상적인 접근입니다. 로그인 후 이용하시기 바랍니다.
+        비정상적인 접근입니다. 정상적인 경로로 이용해주시기 바랍니다.
     </div>
 {% endif %}
 {% endblock %}
