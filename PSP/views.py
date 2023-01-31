@@ -1,10 +1,9 @@
 import subprocess
 
-from django.db import transaction
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from datetime import datetime
-from .models import CustomUser, TimestampedModel, Task
+from .models import CustomUser
 from django.db.utils import IntegrityError
 
 from django.contrib.auth import login, logout
@@ -23,8 +22,8 @@ import sys
 # log/compile                            : 컴파일 결과 출력/예외 로그
 # log/execute                            : 실행 결과 출력/예외 로그
 
-contest_start_time = datetime(2023, 1, 26, 15, 30, 00)
-contest_end_time = datetime(2025, 1, 26, 16, 35, 00)
+contest_start_time = datetime(2023, 1, 29, 00, 12, 00)
+contest_end_time = datetime(2023, 1, 29, 00, 17, 00)
 # contest_end_time = datetime(2023, 1, 26, 16, 35, 00)
 
 
@@ -400,16 +399,3 @@ def task_timecheck(request):
             response.update({'contest': "end"})
 
         return JsonResponse(response)
-
-
-def query_data(request):
-    with transaction.atomic():
-        print("==== CustomUser")
-        for item in CustomUser.objects.all():
-            print(item)
-        print("==== Task")
-        Task.objects.all().delete()
-        for item in Task.objects.all():
-            print(item)
-
-    return render(request, 'PSP/index.html')

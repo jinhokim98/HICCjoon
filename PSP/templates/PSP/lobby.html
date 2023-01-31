@@ -7,27 +7,81 @@
 
 {% block content %}
 {% if user.is_authenticated %}
+    <!-- Header -->
     <header>
-        <h1>{{ user.nickname }}님 환영합니다!</h1>
+        <div class="logo">
+            <i class="fa-solid fa-code"></i>
+            <span class="title">HICCjoon</span>
+        </div>
+        <div class="member">
+            <span class="login_user">{{ user.nickname }}님 환영합니다.</span>
+            <button type="button" class="logout_btn" onclick="location.href={% url 'PSP:user_logout' %}">logout</button>
+        </div>
     </header>
-    <section>
-        <div id="contest_rules">
-            <h2>대회 규칙</h2>
-            <ol>
-                <li>대회 규정1</li>
-                <li>대회 규정2</li>
-                <li>대회 규정3</li>
-                <li>대회 규정4</li>
-                <li>대회 규정5</li>
+
+    <!-- Rule title -->
+    <div class="main_title">
+        <span class="title">대회 규칙</span>
+        <span id="remaining_time"></span>
+        <div class="blank"></div>
+        <div class="blank"></div>
+    </div>
+
+    <!-- Rules -->
+    <main class="contest_rules">
+        <section class="rule">
+            <span class="rule_title">대회 일정</span>
+            <span class="rule_desc">본 대회는 2023.02.17 14:00부터 2023.02.17 17:00까지(시간 포함) 진행한다.</span>
+        </section>
+        <section class="rule">
+            <span class="rule_title">대회 진행 언어</span>
+            <span class="rule_desc">문제를 해결할 때는 C 및 C++, Python만을 사용한다.</span>
+            <ul class="rule_list">
+                <li>C 및 C++ 컴파일리 버전은 12.2.0이다. 해당 컴파일러는 C++ 20버전 이상을 지원한다.</li>
+                <li>Python은 3.10 버전을 사용한다.</li>
+            </ul>
+        </section>
+        <section class="rule">
+            <span class="rule_title">점수 배점 및 동점자 처리 기준</span>
+            <span class="rule_desc">참가자들은 각자 문제를 해결하여 점수를 얻는다. 대회가 끝나는 시점에 점수가 높은 순서대로 순위가 정해진다.</span>
+            <ul class="rule_list">
+                <li>점수는 문제마다 다르다.</li>
+                <li>동점자의 경우, 해당 점수에 먼저 도달한 사람이 더 높은 순위를 가진다.</li>
+                <li>실격자는 0점 처리된다.</li>
+            </ul>
+        </section>
+        <section class="rule">
+            <span class="rule_title">시스템 정보 제출 동의</span>
+            <span class="rule_desc">본 대회에 참여하기 위해 사용자는 다음과 같은 정보를 대회 시스템에 제출하며, 상세 내용은 아래와 같다.</span>
+            <ul class="rule_list">
+                <li>기간 : 대회 종료 후 3개월 및 해당 대회 관련 사항이 전부 종료된 시점</li>
+                <li>자료 : 사용자 ID, 암호화된 PW*, 대회 참가 이력 및 제출한 소스 코드, 제출 결과
+                    * PW는 암호화기법을 통해 서버에 저장된다.</li>
+                <span class="specific">* 사용자는 해당 내용에 대한 설명을 사전 공유받고, 본 시스템에 로그인함으로서 해당 내용에 동의했음을 확인한다.</span>
+            </ul>
+        </section>
+        <section class="rule">
+            <span class="rule_title">실격 기준</span>
+            <span class="rule_desc">아래의 경우에 해당하는 행위를 할 경우에는 실격으로 간주되며, 0점 처리되고, 향후 3년간 HICC에서 주관하는 타 대회 및 프로그램 참가가 금지된다.</span>
+            <ul class="rule_list">
+                <li>타인의 코드를 무단복제하는 행위</li>
+                <li>운영체제 관련 라이브러리(os, winlib 등)를 호출하는 행위</li>
+                <span class="specific">* 해당 경우는 타 시스템에 대한 공격으로 판단, 경우에 따라 민/형사상의 책임을 질 수 있다.</span>
+                <li>고의로 무한루프를 작성해 제출하는 행위</li>
+                <li>멀티스레딩 코드 작성 및 비결정적 코드* 작성 행위</li>
+                <span class="specific">* 비결정적 : random과 같이 외부 요소에 의해 코드 결과가 달라질 수 있는 프로그램</span>
+            </ul>
+        </section>
+        <section class="rule">
+            <span class="rule_title">대회 시상 및 상품 내용</span>
+            <span class="rule_desc">대회 시상은 대회가 끝난 후 대회 규칙에 위배된 행위가 있었는 지 검토 후 시상하도록 하겠습니다. 상품은 아래와 같습니다.</span>
+            <ol class="rule_list">
+                <li>기프티콘 - 뿌링클 + 1.5L 콜라 Set </li>
+                <li>위베어 베이스 곰 LED 피규어 무드등 자취 집들이 선물 (WBL-P01)</li>
+                <li>스타벅스 아메리카노 Tall</li>
             </ol>
-        </div>
-    </section>
-    <footer>
-        <div id="remaining_time_place">
-            <p>대회까지 남은 시간 : </p>
-            <span id="remaining_time"></span>
-        </div>
-    </footer>
+        </section>
+    </main>
 {% else %}
     <div class="login_error">
         비정상적인 접근입니다. 로그인 후 이용하시기 바랍니다.
