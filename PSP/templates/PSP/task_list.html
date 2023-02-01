@@ -46,8 +46,8 @@
                     <td><a href="task/{{ task.index }}">{{ task.name| safe }}</a></td>
                     <td>{{ task.point| safe }}</td>
                     <td>{{ task.author| safe }}</td>
-                    <td>{{ task.is_submit| safe }}</td>
-                    <td>{{ task.score| safe }}</td>
+                    <td class="is_submit {{ task.index }}"></td>
+                    <td class="score {{ task.index }}"></td>
                 </tr>
                 {% endfor %}
             </tbody>
