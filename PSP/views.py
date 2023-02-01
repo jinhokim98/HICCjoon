@@ -394,3 +394,19 @@ def task_timecheck(request):
             response.update({'contest': "end"})
 
         return JsonResponse(response)
+
+
+def get_score(request):
+    if request.method == "POST":
+
+        context = {}
+
+        # DB에서 user가 푼 문제의 번호와 제출여부, 점수를 받았으면 합니다.
+        # 문제 번호는 정수로 바꿔주세요
+        # 사용자가 제출을 하지 않은 문제는 False라도 넘겨주세요.
+        # DB에는 문제번호 순서대로 들어가있지 않을 수도 있습니다. 문제번호 기준으로 리스트를 정렬해주세요.
+        solutions = [[1, True, 100], [2, False, 0], [3, True, 50]]
+
+        context['solution'] = solutions
+
+        return JsonResponse(context)

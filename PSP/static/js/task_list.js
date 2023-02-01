@@ -66,3 +66,36 @@ fetch('task_timecheck/', {
 }
 
 setTimeout(page_move, 1000);
+
+function get_score() {
+    fetch('get_score/', {
+    method: "POST", 	// GET도 넣을 수는 있지만 안넣어도 상관없다. default는 get
+    headers: {
+        "Content-Type": "application/json",	// json형식의 값을 넘겨줌을 header에 명시
+        "X-CSRFToken": csrf_token,
+    },
+    body: JSON.stringify({	//javascript 객체를 json객체로 변환한다.
+        title: "Request score",
+    }),
+    })
+    .then(res => res.json())
+    .then(data => {
+        const is_submit_list = document.querySelectorAll('.is_submit');
+        const score_list = document.querySelectorAll('.score');
+
+        is_submit_list.forEach((element, index) => {
+            if(data.solution[index][0] === parseInt(element.className.split(" ").at(1))) {
+                element.textContent = data.solution[index][1];
+            }
+        });
+
+        score_list.forEach((element, index) => {
+            if(data.solution[index][0] === parseInt(element.className.split(" ").at(1))) {
+                element.textContent = data.solution[index][2];
+            }
+        });
+        setTimeout(get_score, 1000);
+    })
+}
+
+setTimeout(get_score, 1000);
