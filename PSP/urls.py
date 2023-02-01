@@ -34,4 +34,5 @@ urlpatterns = [
     path('task_timecheck/', views.task_timecheck, name='task_timecheck'),
     path('query/', views.query_data, name='query_data'),
     path('get_score/', views.get_score, name='get_score'),
+    path('get_statistics/', views.get_statistics, name='get_statistics'),
 ]

@@ -36,15 +36,7 @@
                         <th scope="col">name</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {% for participant in contest_participants %}
-                    <tr>
-                        <th scope="row">{{ forloop.counter }}</th>
-                        <!-- 참가자의 아이디와 이름을 views.py에서 받습니다. -->
-                        <td>{{ participant.0| safe }}</td>
-                        <td>{{ participant.1| safe }}</td>
-                    </tr>
-                    {% endfor %}
+                <tbody id="participants_info">
                 </tbody>
             </table>
         </div>
@@ -60,15 +52,7 @@
                         <th scope="col">score</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {% for ranking in contest_ranking %}
-                    <tr>
-                        <th scope="row">{{ forloop.counter }}</th>
-                        <!-- 랭킹 순서대로 이름과 점수를 views.py에서 받습니다. -->
-                        <td>{{ ranking.0| safe }}</td>
-                        <td>{{ ranking.1| safe }}</td>
-                    </tr>
-                    {% endfor %}
+                <tbody id="ranking_info">
                 </tbody>
             </table>
         </div>
@@ -91,7 +75,9 @@
         <div class="statis">
             <div class="title">현재 대회 참여인원</div>
             <div class="desc">
-                <div class="amount">~~ 명</div>
+                <div class="amount">
+                    <span id="participants"></span>명
+                </div>
                 <div class="icon">
                     <i class="fa-solid fa-person"></i>
                 </div>
@@ -100,7 +86,8 @@
         <div class="statis">
             <div class="title">대회 만점</div>
             <div class="desc">
-                <div class="amount">~~ 점</div>
+                <div class="amount">
+                    <span id="contest_perfect_score">{{ perfect_score }}</span>점</div>
                 <div class="icon">
                     <i class="fa-regular fa-star"></i>
                 </div>
@@ -109,7 +96,8 @@
         <div class="statis">
             <div class="title">제출완료 인원</div>
             <div class="desc">
-                <div class="amount">~~ 명</div>
+                <div class="amount">
+                    <span id="submit_completed"></span>명</div>
                 <div class="icon">
                     <i class="fa-solid fa-check"></i>
                 </div>

@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block css %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static "css/task.css"%}">
 {% endblock %}
 
@@ -23,7 +24,7 @@
         <div class="time">
             <i class="fa-sharp fa-solid fa-grip-lines-vertical"></i>
             <p>걸린 시간 : </p>
-            <span id="during_time">1시간</span>
+            <span id="during_time">{{ submit_time }}</span>
         </div>
         <table class="table table-hover">
             <thead>
@@ -33,18 +34,18 @@
                     <th scope="col">문제 이름</th>
                     <th scope="col">결과</th>
                     <th scope="col">언어</th>
-                    <th scope="col">제출한 시간</th>
+                    <th scope="col">점수</th>
                 </tr>
             </thead>
             <tbody>
                 {% for solution in solution_list %}
                 <tr>
-                    <td>{{ solution.index| safe }}</td>
-                    <td>{{ user.username| safe }}</td>
-                    <td>{{ solution.name| safe }}</td>
-                    <td>{{ solution.result| safe }}</td>
-                    <td>{{ solution.language| safe }}</td>
-                    <td>{{ solution.time| safe }}</td>
+                    <td>{{ solution.0| safe }}</td>
+                    <td>{{ solution.1| safe }}</td>
+                    <td>{{ solution.2| safe }}</td>
+                    <td>{{ solution.3| safe }}</td>
+                    <td>{{ solution.4| safe }}</td>
+                    <td>{{ solution.5| safe }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

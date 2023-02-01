@@ -3,7 +3,7 @@ import subprocess
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from datetime import datetime
-from .models import CustomUser
+from .models import CustomUser, Task, Solution
 from django.db.utils import IntegrityError
 
 from django.contrib.auth import login, logout
@@ -25,6 +25,8 @@ import sys
 
 contest_start_time = datetime(2023, 1, 12, 00, 12, 00)
 contest_end_time = datetime(2023, 2, 13, 00, 17, 00)
+
+
 # contest_end_time = datetime(2023, 1, 26, 16, 35, 00)
 
 
@@ -68,6 +70,10 @@ def index(request):
                 raise ValueError
 
             login(request, user)
+
+            request.session['member_id'] = user.username
+            request.session['member_name'] = user.nickname
+
             if user.is_staff:
                 return redirect('PSP:monitoring')
             else:
@@ -116,7 +122,7 @@ def signup(request):
 def task_list(request):
     # 문제 목록을 보여주는 화면
     # 현재 Task의 제목, 작성자 및 번호를 목록으로 표현합니다.
-    
+
     # 현재 Task에 존재하는 레코드를 전부 가져와서 tasks라는 변수에 저장해주세요.
     # 일단 임시로 Task라는 클래스를 만들어두었는데, DB에 맞게 편하게 수정하면 됩니다.
     # 인출까지 완료했다면 그 뒤는 제가 인계받아 작업하겠습니다.
@@ -150,7 +156,7 @@ def task_detail(request, number: int = 1):
         extension = ".cpp" if data["language"] == "cpp" else ".py"
         user_id = "test_user"  # user_name을 로그인 세션으로부터 가져와야 함
         solution_file_path = f'solution_file/{user_id}/{number_str}/' \
-                         f'{current_time}{extension}'
+                             f'{current_time}{extension}'
         print(solution_file_path)
 
         # 2. 없는 디렉터리 생성
@@ -308,15 +314,12 @@ def lobby(request):
 def monitoring(request):
     context = {}
 
-    # 추가로 페이지 하단에 대회 종료까지 남은 시간을 보여주고 있다.
-    # 대회 종료시간을 DB에서 가져오려 했지만 contest 테이블이 사라졌기 때문에 여기서 대회 종료 시간을 넘겨주었으면 함
+    # DB에서 등록된 모든 문제의 배점을 합쳐서 perfect_score 변수에 담아주시면 됩니다.
+    perfect_score = 500
 
-    # 대회 참가자 현황과 대회 실시간 랭킹을 보여주고 있는 화면이다.
-    # 대회 참가자 현황은 현재 로그인 하고 있는 사람들의 정보를 가져와서 리스트로 전달해주었으면 함
-    # 딕셔너리의 key 이름은 contest_participants value를 리스트로 전달해주면 됨
+    context['perfect_score'] = perfect_score
+
     # 대회 실시간 랭킹은 유저가 문제 별로 채점 요청을 하고 DB에 solution 안에 점수가 기록될 때 랭킹이 반영되어야한다.
-    # 딕셔너리의 key 이름은 contest_ranking value를 리스트로 전달해주면 된다.
-    # 아마 이것은 비동기 통신을 사용해야 할 듯
 
     return render(request, 'PSP/monitoring.html', context)
 
@@ -324,17 +327,25 @@ def monitoring(request):
 def end(request):
     context = {}
 
-    # 대회가 종료되었을 때 보여지는 화면
-    # lobby, task, task_detail에서 대회 시간이 종료된 즉시 이 페이지로 넘어가야한다.
-    # 여기서는 대회 참가자 이름과 점수, 걸린 시간, 해결한 문제 개수를 보여줘야한다.
-    # username, score, during_time, solving_problem 네 가지 키 값을 넣어서 렌더해주면 된다.
-    # DB에서 점수, 해결한 문제 수를 가져오면 될 듯
+    # 대회 종료시간에서 사용자가 제출완료를 누른 시간을 빼서 이 값에 넣어주세요.
+    submit_time = contest_end_time - datetime(2023, 2, 17, 15, 12, 00)
+
+    # 제출 번호, 아이디, 문제 이름, 결과, 언어, 점수를 DB에서 꺼내서 아래 변수에 담아주세요.
+    solution_list = [
+        ['00001', 'Head of Study Dept.', 'task1', 'Success', 'Python', 100],
+        ['00002', 'Head of Study Dept.', 'task2', 'Compile error', 'Python', 0],
+        ['00003', 'Head of Study Dept.', 'task3', 'Success', 'Python', 70]
+    ]
+
+    context = {
+        "submit_time": submit_time,
+        "solution_list": solution_list
+    }
 
     return render(request, 'PSP/end.html', context)
 
 
 def enroll(request):
-
     # grading_file과 task_file을 저장하는 곳
     # grading_file은 py파일이 저장되며, task_file은 json으로 저장된다.
     # 여기서는 문제 이름이 중복됐는지만 확인해주면 될 것 같다.
@@ -404,7 +415,6 @@ def task_timecheck(request):
 
 def get_score(request):
     if request.method == "POST":
-
         context = {}
 
         # DB에서 user가 푼 문제의 번호와 제출여부, 점수를 받았으면 합니다.
@@ -418,5 +428,50 @@ def get_score(request):
         return JsonResponse(context)
 
 
-def query_data(response):
+def query_data(request):
     pass
+
+
+def get_statistics(request):
+    # 현재 로그인 한 인원 수, 대회의 만점, 모든 문제를 제출완료한 인원 수를 요청합니다.
+    if request.method == "POST":
+        context = {}
+
+        # DB에서 현재 로그인 중인 사람의 수를 세서 participants 변수에 담아주시면 됩니다.
+        participants = 8
+
+        # DB에서 현재 로그인 중인 사람의 아이디와 이름을 participants_detail 변수에 담아주시면 됩니다.
+        participants_detail = [
+            ['President', '조민준'],
+            ['Vice President', '경수현'],
+            ['Head of Planning Dept.', '장민지'],
+            ['Head of literature Dept.', '박준형'],
+            ['Head of Study Dept.', '김진호'],
+            ['Head of Marketing', '이지우'],
+            ['Head of Environment', '김화윤'],
+            ['Head of Activity Dept.', '김효진']
+        ]
+
+        # DB에서 대회 점수를 합산해서 높은 순서대로 정렬해서 변수에 담아주세요
+        ranking_detail = [
+            ['김진호', 250],
+            ['이지우', 230],
+            ['김화윤', 170],
+            ['조민준', 150],
+            ['김효진', 148],
+            ['경수현', 120],
+            ['장민지', 60],
+            ['박준형', 40],
+        ]
+
+        # DB에서 인원을 검색한 후 인원 별로 모든 문제를 제출한 사람의 수를 세서 변수에 담아주시면 됩니다.
+        sumbit_completed = 3
+
+        context = {
+            "participants": participants,
+            "participants_detail": participants_detail,
+            "submit_completed": sumbit_completed,
+            "ranking_detail": ranking_detail
+        }
+
+        return JsonResponse(context)
