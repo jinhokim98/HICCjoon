@@ -333,11 +333,20 @@ def end(request):
     submit_time = contest_end_time - datetime(2023, 2, 17, 15, 12, 00)
 
     # 제출 번호, 아이디, 문제 이름, 결과, 언어, 점수를 DB에서 꺼내서 아래 변수에 담아주세요.
-    solution_list = [
-        ['00001', 'Head of Study Dept.', 'task1', 'Success', 'Python', 100],
-        ['00002', 'Head of Study Dept.', 'task2', 'Compile error', 'Python', 0],
-        ['00003', 'Head of Study Dept.', 'task3', 'Success', 'Python', 70]
-    ]
+    solution_list_all = list(Solution.objects.filter(mname=request.user.username).all())
+    solution_list = list()
+
+    # 빈 리스트 생성
+    for i in range(len(solution_list_all)):
+        solution_list.append(list)
+    # 순서에 맞게 리스트 생성
+    for i in range(len(solution_list_all)):
+        solution_list[i].append(solution_list_all[0])
+        solution_list[i].append(str(request.user.username))
+        solution_list[i].append(Task.objects.get_tname(Task.objects.filter(tid=solution_list_all[i][2])))
+        solution_list[i].append(solution_list_all[6])
+        solution_list[i].append(solution_list_all[3])
+        solution_list[i].append(solution_list_all[5])
 
     context = {
         "submit_time": submit_time,

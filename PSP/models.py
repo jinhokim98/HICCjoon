@@ -38,6 +38,9 @@ class Task(models.Model):
     def __str__(self):
         return self.Task_text
 
+    def get_tname(self):
+        return self.tname
+
 
 class Solution(models.Model):
     objects = models.Manager()
