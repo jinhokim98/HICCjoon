@@ -315,7 +315,9 @@ def monitoring(request):
     context = {}
 
     # DB에서 등록된 모든 문제의 배점을 합쳐서 perfect_score 변수에 담아주시면 됩니다.
-    perfect_score = 500
+    perfect_score = 0
+    for score in list(Solution.objects.score.all()):
+        perfect_score += int(score)
 
     context['perfect_score'] = perfect_score
 
